@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Npgsql.NetTopologySuite" Version="5.0.7" />
+    <PackageReference Include="SD.LLBLGen.Pro.DQE.PostgreSql" Version="5.8.3-hotfix-20210722" />
+    <PackageReference Include="Npgsql" Version="5.0.7" />
+    <PackageReference Include="SD.LLBLGen.Pro.ORMSupportClasses" Version="5.8.3-hotfix-20210722" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="6.0.0-preview.7.21377.19" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ObjectModel\DatabaseGeneric\Restaurant.csproj" />
+    <ProjectReference Include="..\ObjectModel\DatabaseSpecific\RestaurantDBSpecific.csproj" />
+    <ProjectReference Include="..\ObjectModel\View.Persistence\View.Persistence.csproj" />
+    <ProjectReference Include="..\ObjectModel\View\View.csproj" />
+  </ItemGroup>
+
+</Project>
