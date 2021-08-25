@@ -2,13 +2,12 @@ using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Hosting;
 using System;
-using System.Diagnostics; 
-using System.Linq; 
+using System.Diagnostics;
+using Restaurant;
 using Restaurant.DatabaseSpecific;
+using View.DtoClasses;
+using View.Persistence;
 using Restaurant.Linq;
-using Restaurant.EntityClasses;
-using Restaurant.FactoryClasses;
-using Restaurant.HelperClasses;
 using SD.LLBLGen.Pro.DQE.PostgreSql; 
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using SD.LLBLGen.Pro.LinqSupportClasses;
@@ -29,13 +28,48 @@ if (builder.Environment.IsDevelopment())
 
 app.UseStaticFiles();
 
-app.MapGet("/api/menu", async () =>
+app.MapGet("/api/menu", () =>
 {
-    var toppings = new EntityCollection<ToppingEntity>();
-    using var adapter = new DataAccessAdapter();
-    var metaData = new LinqMetaData(adapter);
-    return "";
-}); 
+    List<BaseView>? sauces = null;
+    List<DoughView>? doughs = null;
+    List<SizeView>? sizes = null;
+    List<ToppingView>? toppings = null;
+    using (var adapter = new DataAccessAdapter())
+    {
+        var metaData = new LinqMetaData(adapter);
+
+        var qSauces = (from b in metaData.Base
+                       select b)
+                       .ProjectToBaseView();
+        sauces = qSauces.ToList();
+
+        var qDoughs = (from d in metaData.Dough
+                       select d)
+                       .ProjectToDoughView();
+        doughs = qDoughs.ToList();
+
+        var qSizes = (from s in metaData.Size
+                      select s)
+                      .ProjectToSizeView();
+        sizes = qSizes.ToList();
+
+        var qToppings = (from t in metaData.Topping
+                         select t)
+                         .ProjectToToppingView();
+        toppings = qToppings.ToList();
+    }
+    return new {
+        baseTable = sauces,
+        doughTable = doughs,
+        sizeTable = sizes,
+        toppingTable = toppings
+    };
+});
+
+app.MapPost("api/order", () =>
+{
+
+});
 
 app.Run();
 

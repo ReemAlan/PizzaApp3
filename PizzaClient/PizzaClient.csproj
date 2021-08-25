@@ -1,20 +1,14 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Npgsql" Version="5.0.7" />
-    <PackageReference Include="SD.LLBLGen.Pro.ORMSupportClasses" Version="5.8.2" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\ObjectModel\DatabaseGeneric\Restaurant.csproj" />
-    <ProjectReference Include="..\ObjectModel\DatabaseSpecific\RestaurantDBSpecific.csproj" />
-    <ProjectReference Include="..\ObjectModel\View.Persistence\View.Persistence.csproj" />
-    <ProjectReference Include="..\ObjectModel\View\View.csproj" />
+    <PackageReference Include="Spectre.Console" Version="0.41.0" />
+    <PackageReference Include="System.Net.Http" Version="4.3.4" />
   </ItemGroup>
 
 </Project>

@@ -86,8 +86,7 @@ namespace Restaurant.DatabaseSpecific
 		private static string ReadConnectionStringFromConfig()
 		{
 #if NETSTANDARD2_0
-			var connString = ConfigurationManager.ConnectionStrings[ConnectionStringKeyName].ConnectionString;
-			return connString;
+			return RuntimeConfiguration.GetConnectionString(ConnectionStringKeyName);
 #else
 			return ConfigFileHelper.ReadConnectionStringFromConfig(ConnectionStringKeyName);
 #endif
