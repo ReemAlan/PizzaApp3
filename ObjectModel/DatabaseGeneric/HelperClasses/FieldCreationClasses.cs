@@ -48,6 +48,8 @@ namespace Restaurant.HelperClasses
 		public static EntityField2 Id { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(PizzaFieldIndex.Id); }}
 		/// <summary>Creates a new PizzaEntity.OrderId field instance</summary>
 		public static EntityField2 OrderId { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(PizzaFieldIndex.OrderId); }}
+		/// <summary>Creates a new PizzaEntity.Price field instance</summary>
+		public static EntityField2 Price { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(PizzaFieldIndex.Price); }}
 		/// <summary>Creates a new PizzaEntity.Size field instance</summary>
 		public static EntityField2 Size { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(PizzaFieldIndex.Size); }}
 	}

@@ -6,7 +6,6 @@
 // Templates vendor: Solutions Design.
 //////////////////////////////////////////////////////////////
 using System;
-using System.Configuration;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using SD.LLBLGen.Pro.DQE.PostgreSql;
 namespace Restaurant.DatabaseSpecific

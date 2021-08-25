@@ -91,6 +91,7 @@ app.MapPost("api/order", ([FromBody] Order order) =>
             pizzaRow.Dough = pizza.Dough;
             pizzaRow.OrderId = orderId;
             pizzaRow.Size = pizza.Size;
+            pizzaRow.Price = (decimal)pizza.Price;
             adapter.SaveEntity(pizzaRow, true);
 
             int pizzaId = pizzaRow.Id;
@@ -103,14 +104,6 @@ app.MapPost("api/order", ([FromBody] Order order) =>
             }
         }
     }
-
-    /*using(DataAccessAdapter adapter = new DataAccessAdapter())
-    {
-        var metaData = new LinqMetaData(adapter);
-        var qSauces = (from b in metaData.Base
-                       select b)
-                       .ProjectToBaseView();
-    }*/
 });
 
 app.Run();

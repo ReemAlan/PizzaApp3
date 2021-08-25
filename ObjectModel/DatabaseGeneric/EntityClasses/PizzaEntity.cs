@@ -220,6 +220,14 @@ namespace Restaurant.EntityClasses
 			set	{ SetValue((int)PizzaFieldIndex.OrderId, value); }
 		}
 
+		/// <summary>The Price property of the Entity Pizza<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "pizza"."price".<br/>Table field type characteristics (type, precision, scale, length): Money, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Decimal Price
+		{
+			get { return (System.Decimal)GetValue((int)PizzaFieldIndex.Price, true); }
+			set	{ SetValue((int)PizzaFieldIndex.Price, value); }
+		}
+
 		/// <summary>The Size property of the Entity Pizza<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "pizza"."size".<br/>Table field type characteristics (type, precision, scale, length): Text, 0, 0, 1073741824.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.String Size
@@ -282,6 +290,8 @@ namespace Restaurant
 		Id,
 		///<summary>OrderId. </summary>
 		OrderId,
+		///<summary>Price. </summary>
+		Price,
 		///<summary>Size. </summary>
 		Size,
 		/// <summary></summary>

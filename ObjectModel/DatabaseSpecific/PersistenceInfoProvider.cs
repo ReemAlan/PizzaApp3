@@ -72,12 +72,13 @@ namespace Restaurant.DatabaseSpecific
 		/// <summary>Inits PizzaEntity's mappings</summary>
 		private void InitPizzaEntityMappings()
 		{
-			this.AddElementMapping("PizzaEntity", @"postgres", @"public", "pizza", 5, 0);
+			this.AddElementMapping("PizzaEntity", @"postgres", @"public", "pizza", 6, 0);
 			this.AddElementFieldMapping("PizzaEntity", "Base", "base", false, "Text", 1073741824, 0, 0, false, "", null, typeof(System.String), 0);
 			this.AddElementFieldMapping("PizzaEntity", "Dough", "dough", false, "Text", 1073741824, 0, 0, false, "", null, typeof(System.String), 1);
 			this.AddElementFieldMapping("PizzaEntity", "Id", "id", false, "Integer", 0, 10, 0, true, "public.pizza_id_seq", null, typeof(System.Int32), 2);
 			this.AddElementFieldMapping("PizzaEntity", "OrderId", "order_id", false, "Integer", 0, 10, 0, false, "", null, typeof(System.Int32), 3);
-			this.AddElementFieldMapping("PizzaEntity", "Size", "size", false, "Text", 1073741824, 0, 0, false, "", null, typeof(System.String), 4);
+			this.AddElementFieldMapping("PizzaEntity", "Price", "price", false, "Money", 0, 0, 0, false, "", null, typeof(System.Decimal), 4);
+			this.AddElementFieldMapping("PizzaEntity", "Size", "size", false, "Text", 1073741824, 0, 0, false, "", null, typeof(System.String), 5);
 		}
 
 		/// <summary>Inits PizzaToppingEntity's mappings</summary>

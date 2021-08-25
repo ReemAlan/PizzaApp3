@@ -83,6 +83,7 @@ namespace Restaurant.HelperClasses
 			this.AddElementFieldInfo("PizzaEntity", "Dough", typeof(System.String), false, true, false, false,  (int)PizzaFieldIndex.Dough, 1073741824, 0, 0);
 			this.AddElementFieldInfo("PizzaEntity", "Id", typeof(System.Int32), true, false, true, false,  (int)PizzaFieldIndex.Id, 0, 0, 10);
 			this.AddElementFieldInfo("PizzaEntity", "OrderId", typeof(System.Int32), false, true, false, false,  (int)PizzaFieldIndex.OrderId, 0, 0, 10);
+			this.AddElementFieldInfo("PizzaEntity", "Price", typeof(System.Decimal), false, false, false, false,  (int)PizzaFieldIndex.Price, 0, 0, 0);
 			this.AddElementFieldInfo("PizzaEntity", "Size", typeof(System.String), false, true, false, false,  (int)PizzaFieldIndex.Size, 1073741824, 0, 0);
 		}
 

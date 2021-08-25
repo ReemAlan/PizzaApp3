@@ -162,6 +162,7 @@
           <Field Name="Dough" Type="string" MaxLength="1073741824" />
           <Field Name="Id" Type="int" IsReadOnly="true" Precision="10" IsPrimaryKey="true" />
           <Field Name="OrderId" Type="int" Precision="10" />
+          <Field Name="Price" Type="decimal" />
           <Field Name="Size" Type="string" MaxLength="1073741824" />
         </Fields>
       </EntityDefinition>
@@ -232,9 +233,9 @@
         <Sequence Name="SystemIdentity" />
       </SystemSequences>
       <Catalogs>
-        <Catalog Name="postgres" SyncSource="2">
+        <Catalog Name="postgres">
           <Schemas>
-            <Schema Name="public" SyncSource="2" LastSyncWithDatabase="2021-08-23T11:45:59.9190331Z">
+            <Schema Name="public" SyncSource="2" LastSyncWithDatabase="2021-08-25T19:08:03.0661708Z">
               <Sequences>
                 <Sequence Name="order_id_seq" />
                 <Sequence Name="pizza_id_seq" />
@@ -269,6 +270,7 @@
                     <Field Name="size" Ordinal="3" DbType="19" Length="1073741824" />
                     <Field Name="dough" Ordinal="4" DbType="19" Length="1073741824" />
                     <Field Name="base" Ordinal="5" DbType="19" Length="1073741824" />
+                    <Field Name="price" Ordinal="6" DbType="13" />
                   </Fields>
                 </Table>
                 <Table Name="pizza_topping">
@@ -358,6 +360,7 @@
             <FieldMapping FieldName="Dough" TargetFieldName="dough" />
             <FieldMapping FieldName="Id" TargetFieldName="id" SequenceToUse="postgres:public:pizza_id_seq" />
             <FieldMapping FieldName="OrderId" TargetFieldName="order_id" />
+            <FieldMapping FieldName="Price" TargetFieldName="price" />
             <FieldMapping FieldName="Size" TargetFieldName="size" />
           </FieldMappings>
         </EntityMapping>
