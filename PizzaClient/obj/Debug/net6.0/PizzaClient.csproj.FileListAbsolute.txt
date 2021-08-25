@@ -16,3 +16,21 @@ C:\Users\reema\Documents\LLBLGen Pro\v5.5\Projects\PizzaClient\obj\Debug\net6.0\
 C:\Users\reema\Documents\LLBLGen Pro\v5.5\Projects\PizzaClient\obj\Debug\net6.0\ref\PizzaClient.dll
 C:\Users\reema\Documents\LLBLGen Pro\v5.5\Projects\PizzaClient\bin\Debug\net6.0\Spectre.Console.dll
 C:\Users\reema\Documents\LLBLGen Pro\v5.5\Projects\PizzaClient\bin\Debug\net6.0\Wcwidth.dll
+D:\OtherFolders_Downloads\git\Repos\PizzaApp3\PizzaClient\obj\Debug\net6.0\PizzaClient.csproj.AssemblyReference.cache
+D:\OtherFolders_Downloads\git\Repos\PizzaApp3\PizzaClient\obj\Debug\net6.0\PizzaClient.GeneratedMSBuildEditorConfig.editorconfig
+D:\OtherFolders_Downloads\git\Repos\PizzaApp3\PizzaClient\obj\Debug\net6.0\PizzaClient.AssemblyInfoInputs.cache
+D:\OtherFolders_Downloads\git\Repos\PizzaApp3\PizzaClient\obj\Debug\net6.0\PizzaClient.AssemblyInfo.cs
+D:\OtherFolders_Downloads\git\Repos\PizzaApp3\PizzaClient\obj\Debug\net6.0\PizzaClient.csproj.CoreCompileInputs.cache
+D:\OtherFolders_Downloads\git\Repos\PizzaApp3\PizzaClient\obj\Debug\net6.0\PizzaClient.dll
+D:\OtherFolders_Downloads\git\Repos\PizzaApp3\PizzaClient\obj\Debug\net6.0\ref\PizzaClient.dll
+D:\OtherFolders_Downloads\git\Repos\PizzaApp3\PizzaClient\obj\Debug\net6.0\PizzaClient.pdb
+D:\OtherFolders_Downloads\git\Repos\PizzaApp3\PizzaClient\bin\Debug\net6.0\PizzaClient.exe
+D:\OtherFolders_Downloads\git\Repos\PizzaApp3\PizzaClient\bin\Debug\net6.0\PizzaClient.deps.json
+D:\OtherFolders_Downloads\git\Repos\PizzaApp3\PizzaClient\bin\Debug\net6.0\PizzaClient.runtimeconfig.json
+D:\OtherFolders_Downloads\git\Repos\PizzaApp3\PizzaClient\bin\Debug\net6.0\PizzaClient.dll
+D:\OtherFolders_Downloads\git\Repos\PizzaApp3\PizzaClient\bin\Debug\net6.0\ref\PizzaClient.dll
+D:\OtherFolders_Downloads\git\Repos\PizzaApp3\PizzaClient\bin\Debug\net6.0\PizzaClient.pdb
+D:\OtherFolders_Downloads\git\Repos\PizzaApp3\PizzaClient\bin\Debug\net6.0\Spectre.Console.dll
+D:\OtherFolders_Downloads\git\Repos\PizzaApp3\PizzaClient\bin\Debug\net6.0\Wcwidth.dll
+D:\OtherFolders_Downloads\git\Repos\PizzaApp3\PizzaClient\obj\Debug\net6.0\PizzaClient.csproj.CopyComplete
+D:\OtherFolders_Downloads\git\Repos\PizzaApp3\PizzaClient\obj\Debug\net6.0\PizzaClient.genruntimeconfig.cache

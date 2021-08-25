@@ -4,6 +4,10 @@ using System.Net.Http;
 using System.Text.Json.Nodes;
 using System.Text.Json;
 using System.Text;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using System.Linq;
+using System.Text.Json.Serialization;
 
 namespace PizzaApp
 {
@@ -28,37 +32,36 @@ namespace PizzaApp
             JsonObject parsedMenu = JsonNode.Parse(menu).AsObject();
             DisplayMenu(parsedMenu);
 
-            PlaceOrder();
 
-            //string name = AnsiConsole.Ask<string>("What's your [green]name[/]?");
-            //Order order = new Order(Guid.NewGuid(), name);
-            //bool keepActive = true;
+            string name = AnsiConsole.Ask<string>("What's your [green]name[/]?");
+            Order order = new Order(name);
+            bool keepActive = true;
 
-            //while (keepActive)
-            //{
-            //    order.PlaceOrder();
-            //    if (!AnsiConsole.Confirm("Would you like another pizza?"))
-            //    {
-            //        keepActive = false;
-            //    }
-            //}
+            while (keepActive)
+            {
+                order.PlaceOrder();
+                if (!AnsiConsole.Confirm("Would you like another pizza?"))
+                {
+                    keepActive = false;
+                }
+            }
 
-            //if (AnsiConsole.Confirm("Place this order?"))
-            //{
-            //    var jsonOrder = JsonSerializer.Serialize<Order>(order);
-            //    StringContent newOrder = new StringContent(jsonOrder, Encoding.UTF8, "application/json");
-            //    var response = await client.PostAsync(_baseUrl + "/order", newOrder);
+            if (AnsiConsole.Confirm("Place this order?"))
+            {
+               var jsonOrder = JsonSerializer.Serialize<Order>(order);
+               StringContent newOrder = new StringContent(jsonOrder, Encoding.UTF8, "application/json");
+               var response = await client.PostAsync(_baseUrl + "/order", newOrder);
 
-            //    if (response.IsSuccessStatusCode)
-            //    {
-            //        order.GetOrderPrice();
-            //        AnsiConsole.Markup("[blue]Thank you for visiting our store![/]");
-            //    }
-            //    else
-            //    {
-            //        AnsiConsole.Markup("[crimson]We could not place your order :([/]");
-            //    }
-            //}
+               if (response.IsSuccessStatusCode)
+               {
+                   order.GetOrderPrice();
+                   AnsiConsole.Markup("[blue]Thank you for visiting our store![/]");
+               }
+               else
+               {
+                   AnsiConsole.Markup("[crimson]We could not place your order :([/]");
+               }
+            }
         }
 
         public static void DisplayMenu(JsonObject menu)
@@ -111,43 +114,6 @@ namespace PizzaApp
             AnsiConsole.Render(doughTable);
             AnsiConsole.Render(baseTable);
             AnsiConsole.Render(toppingTable);
-        }
-
-        public static void PlaceOrder()
-        {
-            var size = AnsiConsole.Prompt(
-                new SelectionPrompt<string>()
-                    .Title("What pizza size would you like?")
-                    .MoreChoicesText("[grey](Move up and down to reveal more choices)[/]")
-                    .AddChoices(Sizes.Keys.ToArray()));
-
-            var dough = AnsiConsole.Prompt(
-                new SelectionPrompt<string>()
-                    .Title("What pizza dough would you like?")
-                    .MoreChoicesText("[grey](Move up and down to reveal more choices)[/]")
-                    .AddChoices(Dough.Keys.ToArray()));
-
-            var sauce = AnsiConsole.Prompt(
-                new SelectionPrompt<string>()
-                    .Title("Pick your favourite sauce!")
-                    .MoreChoicesText("[grey](Move up and down to reveal more choices)[/]")
-                    .AddChoices(Sauces.Keys.ToArray()));
-
-            var toppings = AnsiConsole.Prompt(
-                new MultiSelectionPrompt<string>()
-                    .Title("What toppings would you like for your pizza?")
-                    .MoreChoicesText("[grey](Move up and down to reveal more choices)[/]")
-                    .InstructionsText(
-                        "[grey](Press [blue]<space>[/] to toggle a topping, " +
-                        "[green]<enter>[/] to accept)[/]")
-                    .AddChoices(Toppings.Keys.ToArray()));
-
-            //if (AnsiConsole.Confirm("Confirm pizza order"))
-            //{
-            //    Pizza p = new Pizza(size, dough, toppings.ToArray(), sauce);
-            //    p.Price = CalculatePrice(p);
-            //    Pizzas.Add(p);
-            //}
         }
     }
 }
