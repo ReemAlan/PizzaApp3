@@ -2,7 +2,10 @@ using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Hosting;
 using System;
+using System.Data;
 using System.Diagnostics;
+using System.Threading;
+using System.Threading.Tasks;
 using Restaurant;
 using Restaurant.DatabaseSpecific;
 using View.DtoClasses;
@@ -36,35 +39,35 @@ if (builder.Environment.IsDevelopment())
 
 app.UseStaticFiles();
 
-app.MapGet("/api/menu", () =>
+app.MapGet("/api/menu", async () =>
 {
     List<BaseView>? sauces = null;
     List<DoughView>? doughs = null;
     List<SizeView>? sizes = null;
     List<ToppingView>? toppings = null;
-    using (var adapter = new DataAccessAdapter())
+    using (DataAccessAdapter adapter = new DataAccessAdapter())
     {
         var metaData = new LinqMetaData(adapter);
 
         var qSauces = (from b in metaData.Base
                        select b)
                        .ProjectToBaseView();
-        sauces = qSauces.ToList();
+        sauces = await qSauces.ToListAsync();
 
         var qDoughs = (from d in metaData.Dough
                        select d)
                        .ProjectToDoughView();
-        doughs = qDoughs.ToList();
+        doughs = await qDoughs.ToListAsync();
 
         var qSizes = (from s in metaData.Size
                       select s)
                       .ProjectToSizeView();
-        sizes = qSizes.ToList();
+        sizes = await qSizes.ToListAsync();
 
         var qToppings = (from t in metaData.Topping
                          select t)
                          .ProjectToToppingView();
-        toppings = qToppings.ToList();
+        toppings = await qToppings.ToListAsync();
     }
     return new {
         baseTable = sauces,
@@ -74,34 +77,42 @@ app.MapGet("/api/menu", () =>
     };
 });
 
-app.MapPost("api/order", ([FromBody] Order order) =>
+app.MapPost("api/order", async ([FromBody] Order order) =>
 {
-    int orderId = -1;
-
     using(DataAccessAdapter adapter = new DataAccessAdapter())
     {
-        OrderEntity orderRow = new OrderEntity();
-        orderRow.CustomerName = order.CustomerName;
-        adapter.SaveEntity(orderRow, true);
-        orderId = orderRow.Id;
-        foreach (var pizza in order.Pizzas)
+        adapter.StartTransaction(IsolationLevel.ReadCommitted, "MultiEntityInsertion");
+        try
         {
-            PizzaEntity pizzaRow = new PizzaEntity();
-            pizzaRow.Base = pizza.BaseSauce;
-            pizzaRow.Dough = pizza.Dough;
-            pizzaRow.OrderId = orderId;
-            pizzaRow.Size = pizza.Size;
-            pizzaRow.Price = (decimal)pizza.Price;
-            adapter.SaveEntity(pizzaRow, true);
-
-            int pizzaId = pizzaRow.Id;
-            foreach (var topping in pizza.Toppings)
+            OrderEntity orderRow = new OrderEntity();
+            orderRow.CustomerName = order.CustomerName;
+            await adapter.SaveEntityAsync(orderRow, true);
+            int orderId = orderRow.Id;
+            foreach (var pizza in order.Pizzas)
             {
-                PizzaToppingEntity toppingRow = new PizzaToppingEntity();
-                toppingRow.PizzaId = pizzaId;
-                toppingRow.Topping = topping;
-                adapter.SaveEntity(toppingRow, true);
+                PizzaEntity pizzaRow = new PizzaEntity();
+                pizzaRow.Base = pizza.BaseSauce;
+                pizzaRow.Dough = pizza.Dough;
+                pizzaRow.OrderId = orderId;
+                pizzaRow.Size = pizza.Size;
+                pizzaRow.Price = (decimal)pizza.Price;
+                await adapter.SaveEntityAsync(pizzaRow, true);
+
+                int pizzaId = pizzaRow.Id;
+                foreach (var topping in pizza.Toppings)
+                {
+                    PizzaToppingEntity toppingRow = new PizzaToppingEntity();
+                    toppingRow.PizzaId = pizzaId;
+                    toppingRow.Topping = topping;
+                    await adapter.SaveEntityAsync(toppingRow, true);
+                }
             }
+            await adapter.CommitAsync(CancellationToken.None);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e.Message);
+            adapter.Rollback();
         }
     }
 });
