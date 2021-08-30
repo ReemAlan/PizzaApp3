@@ -77,7 +77,7 @@ app.MapGet("/api/menu", async () =>
     };
 });
 
-app.MapPost("api/order", async ([FromBody] Order order) =>
+app.MapPost("api/order", async ([FromBody]Order order) =>
 {
     using(DataAccessAdapter adapter = new DataAccessAdapter())
     {
@@ -116,7 +116,7 @@ app.MapPost("api/order", async ([FromBody] Order order) =>
         }
     }
 });
-
+ 
 app.Run();
 
 static void LlblGen(string connString)
