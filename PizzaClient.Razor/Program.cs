@@ -1,15 +1,12 @@
-using Microsoft.Extensions.Http;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
-builder.Services.AddHttpClient("localhost", c => 
-{
-    c.BaseAddress = new Uri("http://localhost:5000/api/");
+builder.Services.AddHttpClient("localhost", c => {
+    c.BaseAddress = new Uri("http://localhost:5100/api/");
     c.DefaultRequestHeaders.Add("Accept", "application/json");
 });
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -24,7 +21,7 @@ else
     app.UseHsts();
 }
 
-app.UseHttpsRedirection();
+// app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();

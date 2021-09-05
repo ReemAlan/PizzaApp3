@@ -1,8 +1,83 @@
 @page
 @model MenuModel
 @{
-    ViewData["Title"] = "Menu";
+    ViewData["Title"] = "Menu page";
 }
-<h1>@ViewData["Title"]</h1>
 
-<p>Hi there</p>
+<div class="text-center">
+    <h1 class="display-4">Menu</h1>
+</div>
+
+<div>
+    <table class="table table-dark table-hover">
+        <thead>
+            <tr>
+                <th scope="col">Size</th>
+                <th scope="col">Dough Multiplier</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var pair in Model.Sizes)
+            {
+                <tr>
+                    <td>@pair.Key</td>
+                    <td>@pair.Value</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <table class="table table-dark table-hover">
+        <thead>
+            <tr>
+                <th scope="col">Dough</th>
+                <th scope="col">Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var pair in Model.Dough)
+            {
+                <tr>
+                    <td>@pair.Key</td>
+                    <td>@pair.Value</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <table class="table table-dark table-hover">
+        <thead>
+            <tr>
+                <th scope="col">Sauce</th>
+                <th scope="col">Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var pair in Model.Sauces)
+            {
+                <tr>
+                    <td>@pair.Key</td>
+                    <td>@pair.Value</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <table class="table table-dark table-hover">
+        <thead>
+            <tr>
+                <th scope="col">Topping</th>
+                <th scope="col">Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var pair in Model.Toppings)
+            {
+                <tr>
+                    <td>@pair.Key</td>
+                    <td>@pair.Value</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

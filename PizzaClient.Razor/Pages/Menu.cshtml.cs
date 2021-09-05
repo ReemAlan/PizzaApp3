@@ -7,25 +7,47 @@ namespace PizzaClient.Razor.Pages;
 
 public class MenuModel : PageModel
 {
-    private readonly ILogger<MenuModel> _logger;
+    public IDictionary<string, double> Sizes { get; set; } = new Dictionary<string, double>();
+    public IDictionary<string, double> Dough { get; set; } = new Dictionary<string, double>();
+    public IDictionary<string, double> Toppings { get; set; } = new Dictionary<string, double>();
+    public IDictionary<string, double> Sauces { get; set; } = new Dictionary<string, double>();
+
     private readonly IHttpClientFactory _clientFactory;
 
-    // public List<BaseView> Sauces { get; set; }
-    // public List<DoughView> Dough { get; set; }   
-    // public List<SizeView> Sizes { get; set; }
-    // public List<ToppingView> Toppings { get; set; }      
-
-    public MenuModel(ILogger<MenuModel> logger, IHttpClientFactory clientFactory)
+    public MenuModel(IHttpClientFactory clientFactory)
     {
-        _logger = logger;
         _clientFactory = clientFactory;
     }
 
-    public async void OnGet()
+    public async Task OnGetAsync()
     {
         var client = _clientFactory.CreateClient("localhost");
         string response = await client.GetStringAsync("menu");
-        JsonObject menu = JsonNode.Parse(response).AsObject();
-        _logger.LogInformation(menu["baseTable"].ToString());
+        JsonObject? menu = JsonNode.Parse(response).AsObject();
+
+        List<JsonNode?> sizes = menu["sizeTable"].AsArray().ToList();
+        foreach (var obj in sizes)
+        {
+            Sizes.Add((string)obj["option"], (double)obj["multiplier"]);
+        }
+
+        List<JsonNode?> bases = menu["baseTable"].AsArray().ToList();
+        foreach (var obj in bases)
+        {
+            Sauces.Add((string)obj["option"], (double)obj["price"]);
+        }
+
+        List<JsonNode?> dough = menu["doughTable"].AsArray().ToList();
+        foreach (var obj in dough)
+        {
+            Dough.Add((string)obj["option"], (double)obj["price"]);
+        }
+
+        List<JsonNode?> toppings = menu["toppingTable"].AsArray().ToList();
+        foreach (var obj in toppings)
+        {
+            Toppings.Add((string)obj["option"], (double)obj["price"]);
+        }
+
     }
 }
