@@ -7,7 +7,7 @@
 <div class="text-center">
     <h1 class="display-4">Menu</h1>
 </div>
-
+@*Menu table *@
 <div>
     <table class="table table-dark table-hover">
         <thead>
@@ -81,3 +81,29 @@
         </tbody>
     </table>
 </div>
+
+@*Order Form *@
+<form>
+  <div class="mb-3">
+    <label for="exampleInputEmail1" class="form-label">Customer Name</label>
+    <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+  </div>
+  <div class="mb-3">
+    <label for="text" class="form-label">Pizzas</label>
+    @while (true)
+    {
+
+        <div class="row">
+            <select class="form-select" asp-for="Order.Size" id="pizzaOrderSize"
+            asp-items="@(new SelectList(Model.Sizes.keys,"Id","Name"))">
+            <option value="-1" selected>Please choose pizza size</option>
+            </select>
+        </div>
+    }
+  </div>
+  <div class="mb-3 form-check">
+    <input type="checkbox" class="form-check-input" id="exampleCheck1">
+    <label class="form-check-label" for="exampleCheck1">Check me out</label>
+  </div>
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
