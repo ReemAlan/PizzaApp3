@@ -25,29 +25,29 @@ public class MenuModel : PageModel
         string response = await client.GetStringAsync("menu");
         JsonObject? menu = JsonNode.Parse(response).AsObject();
 
-        List<JsonNode?> sizes = menu["sizeTable"].AsArray().ToList();
+        var sizes = menu["sizeTable"].AsArray();
         foreach (var obj in sizes)
         {
             Sizes.Add((string)obj["option"], (double)obj["multiplier"]);
         }
 
-        List<JsonNode?> bases = menu["baseTable"].AsArray().ToList();
+        var bases = menu["baseTable"].AsArray();
         foreach (var obj in bases)
         {
             Sauces.Add((string)obj["option"], (double)obj["price"]);
         }
 
-        List<JsonNode?> dough = menu["doughTable"].AsArray().ToList();
+        var dough = menu["doughTable"].AsArray();
         foreach (var obj in dough)
         {
             Dough.Add((string)obj["option"], (double)obj["price"]);
         }
 
-        List<JsonNode?> toppings = menu["toppingTable"].AsArray().ToList();
+        var toppings = menu["toppingTable"].AsArray();
         foreach (var obj in toppings)
         {
             Toppings.Add((string)obj["option"], (double)obj["price"]);
         }
-
     }
+
 }
