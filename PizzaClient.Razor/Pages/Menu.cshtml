@@ -87,7 +87,7 @@
     <form method="post">
     <div class="mb-3">
         <label class="form-label">Customer Name</label>
-        <input type="text" class="form-control" asp-for="myOrder.CustomerName">
+        <input asp-for="order.CustomerName" type="text" class="form-control">
     </div>
     <div class="mb-3">
         <h5>Pizzas</h5>
@@ -110,25 +110,28 @@
         <div class="row">
             <div class="col-md-3 mb-3">
                 <label class="form-label">Size</label>
-                <select class="form-select form-select-lg mb-3" asp-items="new SelectList(Model.Sizes.Keys)" asp-for="">
+                <select class="form-select form-select-lg mb-3" asp-for="order.Pizza.Size" asp-items="@(new SelectList(Model.Sizes.Keys))">
                     <option selected>Choose a size</option>
                 </select>
             </div>
             <div class="col-md-3 mb-3">
                 <label for="Dough" class="form-label">Dough</label>
-                <select class="form-select form-select-lg mb-3" asp-items="new SelectList(Model.Dough.Keys)">
+                <select class="form-select form-select-lg mb-3" asp-for="order.Pizza.Dough" asp-items="@(new SelectList(Model.Dough.Keys))">
                     <option selected>Choose a dough type</option>
                 </select>
             </div>
             <div class="col-md-3 mb-3">
                 <label for="BaseSauce" class="form-label">Sauce</label>
-                <select class="form-select form-select-lg mb-3" asp-items="new SelectList(Model.Sauces.Keys)">
+                <select class="form-select form-select-lg mb-3" asp-for="order.Pizza.BaseSauce" asp-items="@(new SelectList(Model.Sauces.Keys))">
                     <option selected>Choose a sauce</option>
                 </select>
             </div>
             <div class="col-md-3 mb-3">
                 <label for="Toppings" class="form-label">Toppings</label>
-                <select class="form-select form-select-lg mb-3" multiple asp-items="@(new MultiSelectList(Model.Toppings.Keys))">
+                @* <select class="form-select form-select-lg mb-3" multiple asp-for="order.Pizza.Toppings" asp-items="@(new MultiSelectList(Model.Toppings.Keys))">
+                    <option selected>Choose toppings</option>
+                </select> *@
+                <select class="selectpicker" multiple data-live-search="true" asp-for="order.Pizza.Toppings" asp-items="@(new MultiSelectList(Model.Toppings.Keys))">
                     <option selected>Choose toppings</option>
                 </select>
             </div>

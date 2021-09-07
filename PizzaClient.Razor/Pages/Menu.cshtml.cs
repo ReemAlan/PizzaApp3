@@ -19,8 +19,8 @@ namespace PizzaClient.Razor.Pages
         public IDictionary<string, double> Toppings { get; set; } = new Dictionary<string, double>();
         public IDictionary<string, double> Sauces { get; set; } = new Dictionary<string, double>();
         
-        public bool Flag { get; set; } = true;
-
+        [BindProperty]
+        public Order order { get; set; }
         private readonly IHttpClientFactory _clientFactory;
 
         public MenuModel(IHttpClientFactory clientFactory)
@@ -59,39 +59,42 @@ namespace PizzaClient.Razor.Pages
             }
         }
 
-        public async Task OnPostAsync(Order myOrder)
+        public async Task<IActionResult> OnPostAsync()
         {
-            Console.WriteLine("hello");
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                var price = GetOrderPrice(myOrder);
-
-                var client = _clientFactory.CreateClient("localhost");
-                var jsonOrder = JsonSerializer.Serialize<Order>(myOrder);
-                StringContent newOrder = new StringContent(jsonOrder, Encoding.UTF8, "application/json");
-                var response = await client.PostAsync("order", newOrder);
-
-                if (response.IsSuccessStatusCode)
-                {
-                    ViewData["message"] = $"Thank you for visiting our restaurant!\nThe total price is {price}";
-                }
-                else
-                {
-                    ViewData["message"] = "We could not place your order :(";
-                }
+                return RedirectToAction("OnGetAsync");
             }
+
+            var price = CalculatePrice(order.Pizza);
+
+            var client = _clientFactory.CreateClient("localhost");
+            var jsonOrder = JsonSerializer.Serialize<Order>(order);
+            StringContent newOrder = new StringContent(jsonOrder, Encoding.UTF8, "application/json");
+            var response = await client.PostAsync("order", newOrder);
+
+            if (response.IsSuccessStatusCode)
+            {
+                ViewData["message"] = $"Thank you for visiting our restaurant!\nThe total price is {price}";
+            }
+            else
+            {
+                ViewData["message"] = "We could not place your order :(";
+            }
+
+            return Page();
         }
 
-        public double GetOrderPrice(Order order)
-        {
-            double total = 0;
-            foreach (var pizza in order.Pizzas)
-            {
-                pizza.Price = CalculatePrice(pizza);
-                total += pizza.Price;
-            }
-            return total;
-        }
+        // public double GetOrderPrice(Order order)
+        // {
+        //     double total = 0;
+        //     foreach (var pizza in order.Pizzas)
+        //     {
+        //         pizza.Price = CalculatePrice(pizza);
+        //         total += pizza.Price;
+        //     }
+        //     return total;
+        // }
 
         public double CalculatePrice(Pizza pizza) 
         {

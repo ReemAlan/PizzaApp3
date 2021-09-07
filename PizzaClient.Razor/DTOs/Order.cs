@@ -6,14 +6,9 @@ namespace PizzaClient.Razor.DTOs
     public class Order 
     {
         [Required(ErrorMessage = "You have not chosen any pizza!")]
-        public List<Pizza> Pizzas { get; set; } = new List<Pizza>();
+        public Pizza Pizza { get; set; }
         [Required(ErrorMessage = "Please enter your name")]
-        public string CustomerName { get; set; }
-        
-        public Order(string customerName)
-        {
-            CustomerName = customerName;
-        }
+        public string CustomerName { get; set; } 
     }
 
     public class Pizza
@@ -23,17 +18,10 @@ namespace PizzaClient.Razor.DTOs
         [Required]
         public string Dough { get; set; }
         [Required]
-        public string[] Toppings { get; set; }
+        public List<string> Toppings { get; set; } = new List<string>();
         [Required]
         public string BaseSauce { get; set; }
         [Required]
         public double Price { get; set; }
-        public Pizza(string size, string dough, string[] toppings, string baseSauce) 
-        {
-            Size = size;
-            Dough = dough;
-            Toppings = toppings;
-            BaseSauce = baseSauce;
-        }
     }
 }
