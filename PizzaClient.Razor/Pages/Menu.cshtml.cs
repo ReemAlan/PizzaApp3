@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Text.Json.Nodes;
 using System.Text.Json;
+using System.Text;
 using System.Collections.Generic;
 using PizzaClient.Razor.DTOs;
 using Microsoft.Extensions.Logging;
@@ -17,6 +18,8 @@ namespace PizzaClient.Razor.Pages
         public IDictionary<string, double> Dough { get; set; } = new Dictionary<string, double>();
         public IDictionary<string, double> Toppings { get; set; } = new Dictionary<string, double>();
         public IDictionary<string, double> Sauces { get; set; } = new Dictionary<string, double>();
+        
+        public bool Flag { get; set; } = true;
 
         private readonly IHttpClientFactory _clientFactory;
 
@@ -58,7 +61,48 @@ namespace PizzaClient.Razor.Pages
 
         public async Task OnPostAsync(Order myOrder)
         {
-        
+            Console.WriteLine("hello");
+            if (ModelState.IsValid)
+            {
+                var price = GetOrderPrice(myOrder);
+
+                var client = _clientFactory.CreateClient("localhost");
+                var jsonOrder = JsonSerializer.Serialize<Order>(myOrder);
+                StringContent newOrder = new StringContent(jsonOrder, Encoding.UTF8, "application/json");
+                var response = await client.PostAsync("order", newOrder);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    ViewData["message"] = $"Thank you for visiting our restaurant!\nThe total price is {price}";
+                }
+                else
+                {
+                    ViewData["message"] = "We could not place your order :(";
+                }
+            }
+        }
+
+        public double GetOrderPrice(Order order)
+        {
+            double total = 0;
+            foreach (var pizza in order.Pizzas)
+            {
+                pizza.Price = CalculatePrice(pizza);
+                total += pizza.Price;
+            }
+            return total;
+        }
+
+        public double CalculatePrice(Pizza pizza) 
+        {
+            double sum = 0;
+            foreach (var topping in pizza.Toppings)
+            {
+                sum += Toppings[topping];
+            }
+
+            sum += Sizes[pizza.Size] * Dough[pizza.Dough] + Sauces[pizza.BaseSauce];
+            return sum;
         }
     }
 

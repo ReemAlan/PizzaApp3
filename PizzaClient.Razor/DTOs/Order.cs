@@ -5,9 +5,9 @@ namespace PizzaClient.Razor.DTOs
 {
     public class Order 
     {
-        [Required]
+        [Required(ErrorMessage = "You have not chosen any pizza!")]
         public List<Pizza> Pizzas { get; set; } = new List<Pizza>();
-        [Required]
+        [Required(ErrorMessage = "Please enter your name")]
         public string CustomerName { get; set; }
         
         public Order(string customerName)

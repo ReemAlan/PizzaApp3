@@ -9,7 +9,7 @@
 </div>
 @*Menu table *@
 <div>
-    <table class="table table-dark table-hover">
+    <table class="table table-light table-hover">
         <thead>
             <tr>
                 <th scope="col">Size</th>
@@ -27,10 +27,10 @@
         </tbody>
     </table>
 
-    <table class="table table-dark table-hover">
+    <table class="table table-light table-hover">
         <thead>
             <tr>
-                <th scope="col">Dough</th>
+                <th scope="col w-50">Dough</th>
                 <th scope="col">Price</th>
             </tr>
         </thead>
@@ -45,7 +45,7 @@
         </tbody>
     </table>
 
-    <table class="table table-dark table-hover">
+    <table class="table table-light table-hover">
         <thead>
             <tr>
                 <th scope="col">Sauce</th>
@@ -63,7 +63,7 @@
         </tbody>
     </table>
 
-    <table class="table table-dark table-hover">
+    <table class="table table-light table-hover">
         <thead>
             <tr>
                 <th scope="col">Topping</th>
@@ -83,27 +83,55 @@
 </div>
 
 @*Order Form *@
-<form>
-  <div class="mb-3">
-    <label for="exampleInputEmail1" class="form-label">Customer Name</label>
-    <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-  </div>
-  <div class="mb-3">
-    <label for="text" class="form-label">Pizzas</label>
-    @while (true)
-    {
+<div class="container">
+    <form method="post">
+    <div class="mb-3">
+        <label class="form-label">Customer Name</label>
+        <input type="text" class="form-control" asp-for="myOrder.CustomerName">
+    </div>
+    <div class="mb-3">
+        <h5>Pizzas</h5>
+        @{CreatePizza();}
+        @* <div class="row">
+            <button class="btn btn-success col-md-2 col-md-offset-5" onclick="">Add Pizza</button>
+        </div> *@
+    </div>
+    <button type="submit"  class="btn btn-primary">Submit</button>
+    </form>
+</div>
 
+<div class="row">
+    <h6 class="col-md-12">@ViewData["message"]</h6>
+</div>
+@functions 
+{
+    public async Task CreatePizza()
+    {
         <div class="row">
-            <select class="form-select" asp-for="Order.Size" id="pizzaOrderSize"
-            asp-items="@(new SelectList(Model.Sizes.keys,"Id","Name"))">
-            <option value="-1" selected>Please choose pizza size</option>
-            </select>
+            <div class="col-md-3 mb-3">
+                <label class="form-label">Size</label>
+                <select class="form-select form-select-lg mb-3" asp-items="new SelectList(Model.Sizes.Keys)" asp-for="">
+                    <option selected>Choose a size</option>
+                </select>
+            </div>
+            <div class="col-md-3 mb-3">
+                <label for="Dough" class="form-label">Dough</label>
+                <select class="form-select form-select-lg mb-3" asp-items="new SelectList(Model.Dough.Keys)">
+                    <option selected>Choose a dough type</option>
+                </select>
+            </div>
+            <div class="col-md-3 mb-3">
+                <label for="BaseSauce" class="form-label">Sauce</label>
+                <select class="form-select form-select-lg mb-3" asp-items="new SelectList(Model.Sauces.Keys)">
+                    <option selected>Choose a sauce</option>
+                </select>
+            </div>
+            <div class="col-md-3 mb-3">
+                <label for="Toppings" class="form-label">Toppings</label>
+                <select class="form-select form-select-lg mb-3" multiple asp-items="@(new MultiSelectList(Model.Toppings.Keys))">
+                    <option selected>Choose toppings</option>
+                </select>
+            </div>
         </div>
     }
-  </div>
-  <div class="mb-3 form-check">
-    <input type="checkbox" class="form-check-input" id="exampleCheck1">
-    <label class="form-check-label" for="exampleCheck1">Check me out</label>
-  </div>
-  <button type="submit" class="btn btn-primary">Submit</button>
-</form>
+}
