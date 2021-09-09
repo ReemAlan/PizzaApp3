@@ -77,6 +77,43 @@ app.MapGet("/api/menu", async () =>
     };
 });
 
+app.MapPost("api/price", ([FromBody]JsonObject pizza) =>
+{
+    decimal sum = 0;
+
+    using(DataAccessAdapter adapter = new DataAccessAdapter())
+    {
+        var metaData = new LinqMetaData(adapter);
+  
+        var sizePrice = (from s in metaData.Size
+                        where s.Option == (string)pizza["Size"]
+                        select s.Multiplier);
+
+        var doughPrice = (from d in metaData.Dough
+                        where d.Option == (string)pizza["Dough"]
+                        select d.Price);
+
+        var saucePrice = (from b in metaData.Base
+                        where b.Option == (string)pizza["BaseSauce"]
+                        select b.Price);
+
+        List<string> toppList = new List<string>();
+        foreach (var value in pizza["Toppings"].AsArray()) 
+        {
+            toppList.Add((string)value);
+        }
+        
+        var toppingsPrice = (from t in metaData.Topping
+                            where toppList.Contains(t.Option)
+                            select t.Price)
+                            .ToList()
+                            .Sum();
+
+        sum = (decimal)sizePrice.Single() * doughPrice.Single() + saucePrice.Single() + toppingsPrice;
+    }
+    return sum;
+});
+
 app.MapPost("api/order", async ([FromBody]Order order) =>
 {
     using(DataAccessAdapter adapter = new DataAccessAdapter())

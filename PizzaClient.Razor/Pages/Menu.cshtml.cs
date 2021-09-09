@@ -20,7 +20,8 @@ namespace PizzaClient.Razor.Pages
         public IDictionary<string, double> Sauces { get; set; } = new Dictionary<string, double>();
         
         [BindProperty]
-        public Order order { get; set; }
+        public Order Order { get; set; }
+
         private readonly IHttpClientFactory _clientFactory;
 
         public MenuModel(IHttpClientFactory clientFactory)
@@ -66,35 +67,33 @@ namespace PizzaClient.Razor.Pages
                 return RedirectToAction("OnGetAsync");
             }
 
-            var price = CalculatePrice(order.Pizza);
-
             var client = _clientFactory.CreateClient("localhost");
-            var jsonOrder = JsonSerializer.Serialize<Order>(order);
-            StringContent newOrder = new StringContent(jsonOrder, Encoding.UTF8, "application/json");
-            var response = await client.PostAsync("order", newOrder);
+            var jsonPizza = JsonSerializer.Serialize<Pizza>(Order.Pizza);
 
-            if (response.IsSuccessStatusCode)
-            {
-                ViewData["message"] = $"Thank you for visiting our restaurant!\nThe total price is {price}";
-            }
-            else
-            {
-                ViewData["message"] = "We could not place your order :(";
-            }
+            // var request = new HttpRequestMessage
+            // {
+            //     Method = HttpMethod.Get,
+            //     RequestUri = new Uri("price"),
+            //     Content = new StringContent(jsonPizza, Encoding.UTF8, "application/json"),
+            // };
+            // var price = await client.SendAsync(request);
 
-            return Page();
+            var jsonOrder = JsonSerializer.Serialize<Order>(Order);
+
+            // StringContent newOrder = new StringContent(jsonOrder, Encoding.UTF8, "application/json");
+            // var response = await client.PostAsync("order", newOrder);
+
+            // if (response.IsSuccessStatusCode)
+            // {
+            //     ViewData["message"] = $"Thank you for visiting our restaurant!\nThe total price is {price}";
+            // }
+            // else
+            // {
+            //     ViewData["message"] = "We could not place your order :(";
+            // }
+
+            return RedirectToAction("OnGetAsync");
         }
-
-        // public double GetOrderPrice(Order order)
-        // {
-        //     double total = 0;
-        //     foreach (var pizza in order.Pizzas)
-        //     {
-        //         pizza.Price = CalculatePrice(pizza);
-        //         total += pizza.Price;
-        //     }
-        //     return total;
-        // }
 
         public double CalculatePrice(Pizza pizza) 
         {

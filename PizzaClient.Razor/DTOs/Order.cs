@@ -13,15 +13,15 @@ namespace PizzaClient.Razor.DTOs
 
     public class Pizza
     {
-        [Required]
+        [Required()]
         public string Size { get; set; }
-        [Required]
+        [Required()]
         public string Dough { get; set; }
-        [Required]
+        [Required()]
         public List<string> Toppings { get; set; } = new List<string>();
-        [Required]
+        [Required()]
         public string BaseSauce { get; set; }
-        [Required]
+        [Required()]
         public double Price { get; set; }
     }
 }

@@ -82,59 +82,51 @@
     </table>
 </div>
 
+@{
+    SelectList sizeList = new SelectList(Model.Sizes, "Key", "Key");
+    SelectList doughList = new SelectList(Model.Dough, "Key", "Key");
+    SelectList sauceList = new SelectList(Model.Sauces, "Key", "Key");
+    SelectList toppList = new SelectList(Model.Toppings, "Key", "Key");
+}
+
 @*Order Form *@
 <div class="container">
     <form method="post">
-    <div class="mb-3">
-        <label class="form-label">Customer Name</label>
-        <input asp-for="order.CustomerName" type="text" class="form-control">
-    </div>
-    <div class="mb-3">
-        <h5>Pizzas</h5>
-        @{CreatePizza();}
-        @* <div class="row">
-            <button class="btn btn-success col-md-2 col-md-offset-5" onclick="">Add Pizza</button>
-        </div> *@
-    </div>
-    <button type="submit"  class="btn btn-primary">Submit</button>
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="mb-3">
+            <label class="form-label">Customer Name</label>
+            <input asp-for="Order.CustomerName" type="text" class="form-control">
+            <span asp-validation-for="Order.CustomerName" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <h5>Pizza</h5>
+            <div class="row">
+                <div class="col-md-3 mb-3">
+                    <label class="form-label">Size</label>
+                    <select class="form-select form-select-lg mb-3" asp-for="Order.Pizza.Size" asp-items="sizeList"></select>
+                    <span asp-validation-for="Order.Pizza.Size" class="text-danger"></span>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <label for="Dough" class="form-label">Dough</label>
+                    <select class="form-select form-select-lg mb-3" asp-for="Order.Pizza.Dough" asp-items="doughList"></select>
+                    <span asp-validation-for="Order.Pizza.Dough" class="text-danger"></span>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <label for="BaseSauce" class="form-label">Sauce</label>
+                    <select class="form-select form-select-lg mb-3" asp-for="Order.Pizza.BaseSauce" asp-items="sauceList"></select>
+                    <span asp-validation-for="Order.Pizza.BaseSauce" class="text-danger"></span>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <label for="Toppings" class="form-label">Toppings</label>
+                    <select class="form-select form-select-lg mb-3" multiple asp-for="Order.Pizza.Toppings" asp-items="toppList"></select>
+                    <span asp-validation-for="Order.Pizza.Toppings" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <button type="submit"  class="btn btn-primary">Submit</button>
     </form>
 </div>
 
 <div class="row">
     <h6 class="col-md-12">@ViewData["message"]</h6>
 </div>
-@functions 
-{
-    public async Task CreatePizza()
-    {
-        <div class="row">
-            <div class="col-md-3 mb-3">
-                <label class="form-label">Size</label>
-                <select class="form-select form-select-lg mb-3" asp-for="order.Pizza.Size" asp-items="@(new SelectList(Model.Sizes.Keys))">
-                    <option selected>Choose a size</option>
-                </select>
-            </div>
-            <div class="col-md-3 mb-3">
-                <label for="Dough" class="form-label">Dough</label>
-                <select class="form-select form-select-lg mb-3" asp-for="order.Pizza.Dough" asp-items="@(new SelectList(Model.Dough.Keys))">
-                    <option selected>Choose a dough type</option>
-                </select>
-            </div>
-            <div class="col-md-3 mb-3">
-                <label for="BaseSauce" class="form-label">Sauce</label>
-                <select class="form-select form-select-lg mb-3" asp-for="order.Pizza.BaseSauce" asp-items="@(new SelectList(Model.Sauces.Keys))">
-                    <option selected>Choose a sauce</option>
-                </select>
-            </div>
-            <div class="col-md-3 mb-3">
-                <label for="Toppings" class="form-label">Toppings</label>
-                @* <select class="form-select form-select-lg mb-3" multiple asp-for="order.Pizza.Toppings" asp-items="@(new MultiSelectList(Model.Toppings.Keys))">
-                    <option selected>Choose toppings</option>
-                </select> *@
-                <select class="selectpicker" multiple data-live-search="true" asp-for="order.Pizza.Toppings" asp-items="@(new MultiSelectList(Model.Toppings.Keys))">
-                    <option selected>Choose toppings</option>
-                </select>
-            </div>
-        </div>
-    }
-}
