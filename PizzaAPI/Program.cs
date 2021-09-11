@@ -77,10 +77,10 @@ app.MapGet("/api/menu", async () =>
     };
 });
 
-app.MapGet("api/price", ([FromBody]Pizza pizza) =>
+app.MapGet("api/price", async ([FromBody]Pizza pizza) => 
 {
     decimal sum = 0;
-
+    
     using(DataAccessAdapter adapter = new DataAccessAdapter())
     {
         var metaData = new LinqMetaData(adapter);
@@ -97,13 +97,12 @@ app.MapGet("api/price", ([FromBody]Pizza pizza) =>
                         where b.Option == pizza.BaseSauce
                         select b.Price);
         
-        var toppingsPrice = (from t in metaData.Topping
+        var toppingsPrice = await (from t in metaData.Topping
                             where pizza.Toppings.Contains(t.Option)
                             select t.Price)
-                            .ToList()
-                            .Sum();
+                            .ToListAsync();
 
-        sum = (decimal)sizePrice.Single() * doughPrice.Single() + saucePrice.Single() + toppingsPrice;
+        sum =  (decimal)(await sizePrice.SingleAsync()) * (await doughPrice.SingleAsync()) + (await saucePrice.SingleAsync()) + toppingsPrice.Sum();
     }
     return sum;
 });
@@ -176,16 +175,12 @@ public class Order
 
 public class Pizza
 {
-    [JsonPropertyName("size")]
     public string Size { get; set; }
-    [JsonPropertyName("dough")]
     public string Dough { get; set; }
-    [JsonPropertyName("toppings")]
     public string[] Toppings { get; set; }
-    [JsonPropertyName("base")]
     public string BaseSauce { get; set; }
-    [JsonPropertyName("price")]
     public double Price { get; set; }
+
     public Pizza(string size, string dough, string[] toppings, string baseSauce) 
     {
         Size = size;

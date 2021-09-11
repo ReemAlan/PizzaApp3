@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using System;
 
 namespace PizzaClient.Razor.Pages
 {
@@ -70,41 +71,30 @@ namespace PizzaClient.Razor.Pages
             var client = _clientFactory.CreateClient("localhost");
             var jsonPizza = JsonSerializer.Serialize<Pizza>(Order.Pizza);
 
-            // var request = new HttpRequestMessage
-            // {
-            //     Method = HttpMethod.Get,
-            //     RequestUri = new Uri("price"),
-            //     Content = new StringContent(jsonPizza, Encoding.UTF8, "application/json"),
-            // };
-            // var price = await client.SendAsync(request);
-
+            var request = new HttpRequestMessage
+            {
+                Method = HttpMethod.Get,
+                RequestUri = new Uri(client.BaseAddress.ToString() + "price"),
+                Content = new StringContent(jsonPizza, Encoding.UTF8, "application/json"),
+            };
+            var price = await client.SendAsync(request);
+            Order.Pizza.Price = Double.Parse(await price.Content.ReadAsStringAsync());
+            
             var jsonOrder = JsonSerializer.Serialize<Order>(Order);
 
-            // StringContent newOrder = new StringContent(jsonOrder, Encoding.UTF8, "application/json");
-            // var response = await client.PostAsync("order", newOrder);
+            StringContent newOrder = new StringContent(jsonOrder, Encoding.UTF8, "application/json");
+            var response = await client.PostAsync("order", newOrder);
 
-            // if (response.IsSuccessStatusCode)
-            // {
-            //     ViewData["message"] = $"Thank you for visiting our restaurant!\nThe total price is {price}";
-            // }
-            // else
-            // {
-            //     ViewData["message"] = "We could not place your order :(";
-            // }
-
-            return RedirectToAction("OnGetAsync");
-        }
-
-        public double CalculatePrice(Pizza pizza) 
-        {
-            double sum = 0;
-            foreach (var topping in pizza.Toppings)
+            if (response.IsSuccessStatusCode)
             {
-                sum += Toppings[topping];
+                TempData["message"] = $"Thank you for visiting our restaurant!\nThe total price is {Order.Pizza.Price}";
+            }
+            else
+            {
+                TempData["message"] = "We could not place your order :(";
             }
 
-            sum += Sizes[pizza.Size] * Dough[pizza.Dough] + Sauces[pizza.BaseSauce];
-            return sum;
+            return RedirectToAction("OnGetAsync");
         }
     }
 

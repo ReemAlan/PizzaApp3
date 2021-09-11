@@ -90,7 +90,7 @@
 }
 
 @*Order Form *@
-<div class="container">
+<div class="container formWallpaper">
     <form method="post">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <div class="mb-3">
@@ -128,5 +128,5 @@
 </div>
 
 <div class="row">
-    <h6 class="col-md-12">@ViewData["message"]</h6>
+    <h6 class="col-md-12">@TempData["message"]</h6>
 </div>
