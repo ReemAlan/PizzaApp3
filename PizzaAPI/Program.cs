@@ -77,7 +77,7 @@ app.MapGet("/api/menu", async () =>
     };
 });
 
-app.MapPost("api/price", ([FromBody]JsonObject pizza) =>
+app.MapGet("api/price", ([FromBody]Pizza pizza) =>
 {
     decimal sum = 0;
 
@@ -86,25 +86,19 @@ app.MapPost("api/price", ([FromBody]JsonObject pizza) =>
         var metaData = new LinqMetaData(adapter);
   
         var sizePrice = (from s in metaData.Size
-                        where s.Option == (string)pizza["Size"]
+                        where s.Option == pizza.Size
                         select s.Multiplier);
 
         var doughPrice = (from d in metaData.Dough
-                        where d.Option == (string)pizza["Dough"]
+                        where d.Option == pizza.Dough
                         select d.Price);
 
         var saucePrice = (from b in metaData.Base
-                        where b.Option == (string)pizza["BaseSauce"]
+                        where b.Option == pizza.BaseSauce
                         select b.Price);
-
-        List<string> toppList = new List<string>();
-        foreach (var value in pizza["Toppings"].AsArray()) 
-        {
-            toppList.Add((string)value);
-        }
         
         var toppingsPrice = (from t in metaData.Topping
-                            where toppList.Contains(t.Option)
+                            where pizza.Toppings.Contains(t.Option)
                             select t.Price)
                             .ToList()
                             .Sum();
@@ -186,7 +180,7 @@ public class Pizza
     public string Size { get; set; }
     [JsonPropertyName("dough")]
     public string Dough { get; set; }
-    [JsonPropertyName("topping")]
+    [JsonPropertyName("toppings")]
     public string[] Toppings { get; set; }
     [JsonPropertyName("base")]
     public string BaseSauce { get; set; }
