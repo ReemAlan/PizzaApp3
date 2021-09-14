@@ -91,13 +91,13 @@ namespace PizzaClient.Razor.Pages
             if (response.IsSuccessStatusCode)
             {
                 TempData["message"] = $"Thank you for visiting our restaurant!\nThe total price is {Order.Pizza.Price}";
-                isSubmitClicked = true;
             }
             else
             {
                 TempData["message"] = "We could not place your order :(";
-                isSubmitClicked = true;
             }
+            
+            isSubmitClicked = true;
 
             return RedirectToPage("Menu");
         }
