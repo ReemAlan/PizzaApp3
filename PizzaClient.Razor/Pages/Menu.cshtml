@@ -9,7 +9,7 @@
 </div>
 @*Menu table *@
 <div>
-    <table class="table table-dark table-hover">
+    <table class="table table-light table-hover">
         <thead>
             <tr>
                 <th scope="col">Size</th>
@@ -27,10 +27,10 @@
         </tbody>
     </table>
 
-    <table class="table table-dark table-hover">
+    <table class="table table-light table-hover">
         <thead>
             <tr>
-                <th scope="col">Dough</th>
+                <th scope="col w-50">Dough</th>
                 <th scope="col">Price</th>
             </tr>
         </thead>
@@ -45,7 +45,7 @@
         </tbody>
     </table>
 
-    <table class="table table-dark table-hover">
+    <table class="table table-light table-hover">
         <thead>
             <tr>
                 <th scope="col">Sauce</th>
@@ -63,7 +63,7 @@
         </tbody>
     </table>
 
-    <table class="table table-dark table-hover">
+    <table class="table table-light table-hover">
         <thead>
             <tr>
                 <th scope="col">Topping</th>
@@ -82,28 +82,71 @@
     </table>
 </div>
 
-@*Order Form *@
-<form>
-  <div class="mb-3">
-    <label for="exampleInputEmail1" class="form-label">Customer Name</label>
-    <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-  </div>
-  <div class="mb-3">
-    <label for="text" class="form-label">Pizzas</label>
-    @while (true)
-    {
+@{
+    SelectList sizeList = new SelectList(Model.Sizes, "Key", "Key");
+    SelectList doughList = new SelectList(Model.Dough, "Key", "Key");
+    SelectList sauceList = new SelectList(Model.Sauces, "Key", "Key");
+    SelectList toppList = new SelectList(Model.Toppings, "Key", "Key");
+}
 
-        <div class="row">
-            <select class="form-select" asp-for="Order.Size" id="pizzaOrderSize"
-            asp-items="@(new SelectList(Model.Sizes.keys,"Id","Name"))">
-            <option value="-1" selected>Please choose pizza size</option>
-            </select>
+@*Order Form *@
+<div class="container page-header bg-gradient-primary-to-secondary page-header-dark">
+    <form method="post">
+        <div asp-validation-summary="ModelOnly" class="text-warning"></div>
+        <div class="mb-3">
+            <label class="form-label">Customer Name</label>
+            <input asp-for="Order.CustomerName" type="text" class="form-control">
+            <span asp-validation-for="Order.CustomerName" class="text-warning"></span>
         </div>
+        <div class="mb-3">
+            <h5>Pizza</h5>
+            <div class="row">
+                <div class="col-md-3 mb-3">
+                    <label class="form-label">Size</label>
+                    <select class="form-select form-select-lg mb-3" asp-for="Order.Pizza.Size" asp-items="sizeList"></select>
+                    <span asp-validation-for="Order.Pizza.Size" class="text-warning"></span>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <label for="Dough" class="form-label">Dough</label>
+                    <select class="form-select form-select-lg mb-3" asp-for="Order.Pizza.Dough" asp-items="doughList"></select>
+                    <span asp-validation-for="Order.Pizza.Dough" class="text-warning"></span>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <label for="BaseSauce" class="form-label">Sauce</label>
+                    <select class="form-select form-select-lg mb-3" asp-for="Order.Pizza.BaseSauce" asp-items="sauceList"></select>
+                    <span asp-validation-for="Order.Pizza.BaseSauce" class="text-warning"></span>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <label for="Toppings" class="form-label">Toppings</label>
+                    <select class="form-select form-select-lg mb-3" multiple asp-for="Order.Pizza.Toppings" asp-items="toppList"></select>
+                    <span asp-validation-for="Order.Pizza.Toppings" class="text-warning"></span>
+                </div>
+            </div>
+        </div>
+        <button type="submit" id="SubmitModal" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Submit</button>
+    </form>
+</div>
+
+@section Scripts {
+    @if (Model.isSubmitClicked == true)
+    {
+        <script>
+            $('#staticBackdrop').modal("show");
+        </script>
     }
+    <partial name="_ValidationScriptsPartial" />
+} 
+
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Order Submitted &#x1F60a; </h5>
+      </div>
+      <div class="modal-body">
+        <h6 class="col-md-12">@TempData["message"] LE &#128176;</h6>
+      </div>
+    </div>
   </div>
-  <div class="mb-3 form-check">
-    <input type="checkbox" class="form-check-input" id="exampleCheck1">
-    <label class="form-check-label" for="exampleCheck1">Check me out</label>
-  </div>
-  <button type="submit" class="btn btn-primary">Submit</button>
-</form>
+</div>
