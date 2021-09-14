@@ -92,11 +92,11 @@
 @*Order Form *@
 <div class="container page-header bg-gradient-primary-to-secondary page-header-dark">
     <form method="post">
-        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div asp-validation-summary="ModelOnly" class="text-warning"></div>
         <div class="mb-3">
             <label class="form-label">Customer Name</label>
             <input asp-for="Order.CustomerName" type="text" class="form-control">
-            <span asp-validation-for="Order.CustomerName" class="text-danger"></span>
+            <span asp-validation-for="Order.CustomerName" class="text-warning"></span>
         </div>
         <div class="mb-3">
             <h5>Pizza</h5>
@@ -104,22 +104,22 @@
                 <div class="col-md-3 mb-3">
                     <label class="form-label">Size</label>
                     <select class="form-select form-select-lg mb-3" asp-for="Order.Pizza.Size" asp-items="sizeList"></select>
-                    <span asp-validation-for="Order.Pizza.Size" class="text-danger"></span>
+                    <span asp-validation-for="Order.Pizza.Size" class="text-warning"></span>
                 </div>
                 <div class="col-md-3 mb-3">
                     <label for="Dough" class="form-label">Dough</label>
                     <select class="form-select form-select-lg mb-3" asp-for="Order.Pizza.Dough" asp-items="doughList"></select>
-                    <span asp-validation-for="Order.Pizza.Dough" class="text-danger"></span>
+                    <span asp-validation-for="Order.Pizza.Dough" class="text-warning"></span>
                 </div>
                 <div class="col-md-3 mb-3">
                     <label for="BaseSauce" class="form-label">Sauce</label>
                     <select class="form-select form-select-lg mb-3" asp-for="Order.Pizza.BaseSauce" asp-items="sauceList"></select>
-                    <span asp-validation-for="Order.Pizza.BaseSauce" class="text-danger"></span>
+                    <span asp-validation-for="Order.Pizza.BaseSauce" class="text-warning"></span>
                 </div>
                 <div class="col-md-3 mb-3">
                     <label for="Toppings" class="form-label">Toppings</label>
                     <select class="form-select form-select-lg mb-3" multiple asp-for="Order.Pizza.Toppings" asp-items="toppList"></select>
-                    <span asp-validation-for="Order.Pizza.Toppings" class="text-danger"></span>
+                    <span asp-validation-for="Order.Pizza.Toppings" class="text-warning"></span>
                 </div>
             </div>
         </div>
@@ -134,6 +134,7 @@
             $('#staticBackdrop').modal("show");
         </script>
     }
+    <partial name="_ValidationScriptsPartial" />
 } 
 
 <!-- Modal -->

@@ -68,7 +68,7 @@ namespace PizzaClient.Razor.Pages
         {
             if (!ModelState.IsValid)
             {
-                return RedirectToAction("OnGetAsync");
+                return RedirectToPage("Menu");
             }
 
             var client = _clientFactory.CreateClient("localhost");
