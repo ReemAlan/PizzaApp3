@@ -123,10 +123,29 @@
                 </div>
             </div>
         </div>
-        <button type="submit"  class="btn btn-primary">Submit</button>
+        <button type="submit" id="SubmitModal" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Submit</button>
     </form>
 </div>
 
-<div class="row">
-    <h6 class="col-md-12">@TempData["message"]</h6>
+@section Scripts {
+    @if (Model.isSubmitClicked == true)
+    {
+        <script>
+            $('#staticBackdrop').modal("show");
+        </script>
+    }
+} 
+
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Order Submitted &#x1F60a; </h5>
+      </div>
+      <div class="modal-body">
+        <h6 class="col-md-12">@TempData["message"] LE &#128176;</h6>
+      </div>
+    </div>
+  </div>
 </div>

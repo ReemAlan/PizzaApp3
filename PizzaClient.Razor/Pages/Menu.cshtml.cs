@@ -19,6 +19,9 @@ namespace PizzaClient.Razor.Pages
         public IDictionary<string, double> Dough { get; set; } = new Dictionary<string, double>();
         public IDictionary<string, double> Toppings { get; set; } = new Dictionary<string, double>();
         public IDictionary<string, double> Sauces { get; set; } = new Dictionary<string, double>();
+
+        [TempData]
+        public bool isSubmitClicked { get; set; } = false;
         
         [BindProperty]
         public Order Order { get; set; }
@@ -88,14 +91,15 @@ namespace PizzaClient.Razor.Pages
             if (response.IsSuccessStatusCode)
             {
                 TempData["message"] = $"Thank you for visiting our restaurant!\nThe total price is {Order.Pizza.Price}";
+                isSubmitClicked = true;
             }
             else
             {
                 TempData["message"] = "We could not place your order :(";
+                isSubmitClicked = true;
             }
 
-            return RedirectToAction("OnGetAsync");
+            return RedirectToPage("Menu");
         }
     }
-
 }

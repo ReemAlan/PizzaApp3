@@ -78,7 +78,7 @@ th {
 .form-background {
   padding-top: 10rem;
   padding-bottom: calc(10rem - 4.5rem);
-  background: /*linear-gradient(to bottom, rgba(92, 77, 66, 0.8) 0%, rgba(92, 77, 66, 0.8) 100%),*/ url("https://thumbs.dreamstime.com/z/pizza-seamless-pattern-vector-pizza-pattern-abstract-background-background-useful-restaurant-identity-packaging-89205691.jpg");
+  background: url("https://thumbs.dreamstime.com/z/pizza-seamless-pattern-vector-pizza-pattern-abstract-background-background-useful-restaurant-identity-packaging-89205691.jpg");
   background-position: center;
   background-repeat: no-repeat;
   background-attachment: scroll;
@@ -86,9 +86,6 @@ th {
 }
 
 .bg-gradient-primary-to-secondary{
-  /*background-color: #0061f2;
-  background-image: linear-gradient(135deg,#0061f2,rgba(105,0,199,.8));*/
-  /*border: 2px solid;*/
   border-radius: 15px 15px 480px 480px;
 }
 
@@ -103,10 +100,8 @@ th {
 }
 
 .bg-gradient-primary-to-secondary:before {
-  /*background-color: #0061f2;
-  background-image: linear-gradient(135deg,#0061f2,rgba(105,0,199,.8));*/
   background-color: #42378f;
-background-image: linear-gradient(315deg, #42378f 0%, #f53844 74%);
+  background-image: linear-gradient(315deg, #42378f 0%, #f53844 74%);
   content:'';
   position:absolute;
   top:0; left:-25%; bottom:4px;
