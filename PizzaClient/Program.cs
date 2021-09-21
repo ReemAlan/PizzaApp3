@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
 using System.Text.Json.Serialization;
+using System;
 
 namespace PizzaApp
 {
@@ -15,10 +16,10 @@ namespace PizzaApp
     {
         static readonly string _baseUrl = "http://localhost:5000/api";
 
-        public static IDictionary<string, double> Sizes { get; set; } = new Dictionary<string, double>();
-        public static IDictionary<string, double> Dough { get; set; } = new Dictionary<string, double>();
-        public static IDictionary<string, double> Toppings { get; set; } = new Dictionary<string, double>();
-        public static IDictionary<string, double> Sauces { get; set; } = new Dictionary<string, double>();
+        public static Dictionary<string, double> Sizes { get; set; } = new();
+        public static Dictionary<string, double> Dough { get; set; } = new();
+        public static Dictionary<string, double> Toppings { get; set; } = new();
+        public static Dictionary<string, double> Sauces { get; set; } = new();
 
         public static async Task Main(string[] args)
         {
@@ -48,7 +49,11 @@ namespace PizzaApp
 
             if (AnsiConsole.Confirm("Place this order?"))
             {
-               var jsonOrder = JsonSerializer.Serialize<Order>(order);
+               var jsonOrder = JsonSerializer.Serialize<Order>(order, new JsonSerializerOptions
+               {
+                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+               });
+               Console.WriteLine(jsonOrder);
                StringContent newOrder = new StringContent(jsonOrder, Encoding.UTF8, "application/json");
                var response = await client.PostAsync(_baseUrl + "/order", newOrder);
 

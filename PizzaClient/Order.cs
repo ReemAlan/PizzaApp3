@@ -8,9 +8,7 @@ namespace PizzaApp
 {
     public class Order 
     {
-        [JsonPropertyName("pizzas")]
         public List<Pizza> Pizzas { get; set; } = new List<Pizza>();
-        [JsonPropertyName("customerName")]
         public string CustomerName { get; set; }
         
         public Order(string customerName)

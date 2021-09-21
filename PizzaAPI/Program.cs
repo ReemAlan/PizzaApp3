@@ -41,34 +41,29 @@ app.UseStaticFiles();
 
 app.MapGet("/api/menu", async () =>
 {
-    List<BaseView>? sauces = null;
-    List<DoughView>? doughs = null;
-    List<SizeView>? sizes = null;
-    List<ToppingView>? toppings = null;
-    using (DataAccessAdapter adapter = new DataAccessAdapter())
-    {
-        var metaData = new LinqMetaData(adapter);
+    using var adapter = new DataAccessAdapter();
+    var metaData = new LinqMetaData(adapter);
 
-        var qSauces = (from b in metaData.Base
-                       select b)
-                       .ProjectToBaseView();
-        sauces = await qSauces.ToListAsync();
+    var qSauces = (from b in metaData.Base
+                    select b)
+                    .ProjectToBaseView();
+    var sauces = await qSauces.ToListAsync();
 
-        var qDoughs = (from d in metaData.Dough
-                       select d)
-                       .ProjectToDoughView();
-        doughs = await qDoughs.ToListAsync();
+    var qDoughs = (from d in metaData.Dough
+                    select d)
+                    .ProjectToDoughView();
+    var doughs = await qDoughs.ToListAsync();
 
-        var qSizes = (from s in metaData.Size
-                      select s)
-                      .ProjectToSizeView();
-        sizes = await qSizes.ToListAsync();
+    var qSizes = (from s in metaData.Size
+                    select s)
+                    .ProjectToSizeView();
+    var sizes = await qSizes.ToListAsync();
 
-        var qToppings = (from t in metaData.Topping
-                         select t)
-                         .ProjectToToppingView();
-        toppings = await qToppings.ToListAsync();
-    }
+    var qToppings = (from t in metaData.Topping
+                        select t)
+                        .ProjectToToppingView();
+    var toppings = await qToppings.ToListAsync();
+
     return new {
         baseTable = sauces,
         doughTable = doughs,
@@ -81,69 +76,66 @@ app.MapGet("api/price", async ([FromBody]Pizza pizza) =>
 {
     decimal sum = 0;
     
-    using(DataAccessAdapter adapter = new DataAccessAdapter())
-    {
-        var metaData = new LinqMetaData(adapter);
-  
-        var sizePrice = (from s in metaData.Size
-                        where s.Option == pizza.Size
-                        select s.Multiplier);
+    using var adapter = new DataAccessAdapter();
+    var metaData = new LinqMetaData(adapter);
 
-        var doughPrice = (from d in metaData.Dough
-                        where d.Option == pizza.Dough
-                        select d.Price);
+    var sizePrice = (from s in metaData.Size
+                    where s.Option == pizza.Size
+                    select s.Multiplier);
 
-        var saucePrice = (from b in metaData.Base
-                        where b.Option == pizza.BaseSauce
-                        select b.Price);
-        
-        var toppingsPrice = await (from t in metaData.Topping
-                            where pizza.Toppings.Contains(t.Option)
-                            select t.Price)
-                            .ToListAsync();
+    var doughPrice = (from d in metaData.Dough
+                    where d.Option == pizza.Dough
+                    select d.Price);
 
-        sum =  (decimal)(await sizePrice.SingleAsync()) * (await doughPrice.SingleAsync()) + (await saucePrice.SingleAsync()) + toppingsPrice.Sum();
-    }
+    var saucePrice = (from b in metaData.Base
+                    where b.Option == pizza.BaseSauce
+                    select b.Price);
+    
+    var toppingsPrice = await (from t in metaData.Topping
+                        where pizza.Toppings.Contains(t.Option)
+                        select t.Price)
+                        .ToListAsync();
+
+    sum =  (decimal)(await sizePrice.SingleAsync()) * (await doughPrice.SingleAsync()) + (await saucePrice.SingleAsync()) + toppingsPrice.Sum();
+
     return sum;
 });
 
 app.MapPost("api/order", async ([FromBody]Order order) =>
 {
-    using(DataAccessAdapter adapter = new DataAccessAdapter())
+    using var adapter = new DataAccessAdapter();
+    adapter.StartTransaction(IsolationLevel.ReadCommitted, "MultiEntityInsertion");
+    try
     {
-        adapter.StartTransaction(IsolationLevel.ReadCommitted, "MultiEntityInsertion");
-        try
+        OrderEntity orderRow = new OrderEntity();
+        orderRow.CustomerName = order.CustomerName;
+        await adapter.SaveEntityAsync(orderRow, true);
+        int orderId = orderRow.Id;
+        foreach (var pizza in order.Pizzas)
         {
-            OrderEntity orderRow = new OrderEntity();
-            orderRow.CustomerName = order.CustomerName;
-            await adapter.SaveEntityAsync(orderRow, true);
-            int orderId = orderRow.Id;
-            foreach (var pizza in order.Pizzas)
-            {
-                PizzaEntity pizzaRow = new PizzaEntity();
-                pizzaRow.Base = pizza.BaseSauce;
-                pizzaRow.Dough = pizza.Dough;
-                pizzaRow.OrderId = orderId;
-                pizzaRow.Size = pizza.Size;
-                pizzaRow.Price = (decimal)pizza.Price;
-                await adapter.SaveEntityAsync(pizzaRow, true);
+            PizzaEntity pizzaRow = new PizzaEntity();
+            pizzaRow.Base = pizza.BaseSauce;
+            pizzaRow.Dough = pizza.Dough;
+            pizzaRow.OrderId = orderId;
+            pizzaRow.Size = pizza.Size;
+            pizzaRow.Price = (decimal)pizza.Price;
+            await adapter.SaveEntityAsync(pizzaRow, true);
 
-                int pizzaId = pizzaRow.Id;
-                foreach (var topping in pizza.Toppings)
-                {
-                    PizzaToppingEntity toppingRow = new PizzaToppingEntity();
-                    toppingRow.PizzaId = pizzaId;
-                    toppingRow.Topping = topping;
-                    await adapter.SaveEntityAsync(toppingRow, true);
-                }
+            int pizzaId = pizzaRow.Id;
+            foreach (var topping in pizza.Toppings)
+            {
+                PizzaToppingEntity toppingRow = new PizzaToppingEntity();
+                toppingRow.PizzaId = pizzaId;
+                toppingRow.Topping = topping;
+                await adapter.SaveEntityAsync(toppingRow, true);
             }
-            await adapter.CommitAsync(CancellationToken.None);
         }
-        catch (Exception e)
-        {
-            Console.WriteLine(e.Message);
-            adapter.Rollback();
-        }
+        await adapter.CommitAsync(CancellationToken.None);
+    }
+    catch (Exception e)
+    {
+        Console.WriteLine(e.Message);
+        adapter.Rollback();
     }
 });
  
@@ -162,9 +154,7 @@ static void LlblGen(string connString)
 
 public class Order 
 {
-    [JsonPropertyName("pizzas")]
     public List<Pizza> Pizzas { get; set; } = new List<Pizza>();
-    [JsonPropertyName("customerName")]
     public string CustomerName { get; set; }
     
     public Order(string customerName)
