@@ -1,0 +1,121 @@
+@page "/menu"
+@inject IHttpClientFactory _clientFactory
+
+<h1>Main Menu</h1>
+
+<div>
+    <table class="table table-light table-hover">
+        <thead>
+            <tr>
+                <th scope="col">Size</th>
+                <th scope="col">Dough Multiplier</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var pair in Sizes)
+            {
+                <tr>
+                    <td>@pair.Key</td>
+                    <td>@pair.Value</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <table class="table table-light table-hover">
+        <thead>
+            <tr>
+                <th scope="col w-50">Dough</th>
+                <th scope="col">Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var pair in Dough)
+            {
+                <tr>
+                    <td>@pair.Key</td>
+                    <td>@pair.Value</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <table class="table table-light table-hover">
+        <thead>
+            <tr>
+                <th scope="col">Sauce</th>
+                <th scope="col">Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var pair in Sauces)
+            {
+                <tr>
+                    <td>@pair.Key</td>
+                    <td>@pair.Value</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <table class="table table-light table-hover">
+        <thead>
+            <tr>
+                <th scope="col">Topping</th>
+                <th scope="col">Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var pair in Toppings)
+            {
+                <tr>
+                    <td>@pair.Key</td>
+                    <td>@pair.Value</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@code {
+
+    public Dictionary<string, double> Sizes = new();
+    public Dictionary<string, double> Dough = new();
+    public Dictionary<string, double> Sauces = new();
+    public Dictionary<string, double> Toppings = new();
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender) {
+            var client = _clientFactory.CreateClient("localhost");
+            var response = await client.GetStringAsync("menu");
+            JsonObject? menu = JsonNode.Parse(response).AsObject();
+
+            var sizes = menu["sizeTable"].AsArray();
+            foreach (var obj in sizes)
+            {
+                Sizes.Add((string)obj["option"], (double)obj["multiplier"]);
+            }
+
+            var bases = menu["baseTable"].AsArray();
+            foreach (var obj in bases)
+            {
+                Sauces.Add((string)obj["option"], (double)obj["price"]);
+            }
+
+            var dough = menu["doughTable"].AsArray();
+            foreach (var obj in dough)
+            {
+                Dough.Add((string)obj["option"], (double)obj["price"]);
+            }
+
+            var toppings = menu["toppingTable"].AsArray();
+            foreach (var obj in toppings)
+            {
+                Toppings.Add((string)obj["option"], (double)obj["price"]);
+            }
+
+            StateHasChanged();
+        }
+    }  
+}
