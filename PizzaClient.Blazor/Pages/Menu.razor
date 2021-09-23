@@ -77,12 +77,44 @@
     </table>
 </div>
 
+@*Order Form *@
+@* <div>
+    <EditForm Model="@order" OnValidSubmit="@HandleSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <Field>
+            <FieldLabel>Name</FieldLabel>
+            <TextEdit Placeholder="Enter name" />
+        </Field>
+
+        <Row>
+            <h5>Pizza</h5>
+            <Column ColumnSize="ColumnSize.Is3.WithOffset">
+                <Field>
+                    <FieldLabel>Size</FieldLabel>
+                    <SelectList
+                    TItem="Dictionary"
+                    TValue="string"
+                    Data="@Sizes"
+                    TextField="@((item)=>item.MyTextField)"
+                    ValueField="@((item)=>item.MyValueField)"
+                    SelectedValue="@selectedListValue"
+                    SelectedValueChanged="@MyListValueChangedHandler"
+                    DefaultItemText="Choose your country" />
+                </Field>
+            </Column>
+        </Row>
+    </EditForm>
+</div> *@
+
 @code {
 
-    public Dictionary<string, double> Sizes = new();
-    public Dictionary<string, double> Dough = new();
-    public Dictionary<string, double> Sauces = new();
-    public Dictionary<string, double> Toppings = new();
+    public Dictionary<string, double> Sizes { get; set; } = new();
+    public Dictionary<string, double> Dough { get; set; } = new();
+    public Dictionary<string, double> Sauces { get; set; } = new();
+    public Dictionary<string, double> Toppings { get; set; } = new();
+    public Order order { get; set; }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
