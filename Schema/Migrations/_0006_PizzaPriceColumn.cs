@@ -18,6 +18,5 @@ namespace Schema.Migrations
             Delete.Column("price")
                 .FromTable("pizza");
         }
-
     }
 }

@@ -9,9 +9,9 @@ using Microsoft.Extensions.Configuration;
 
 namespace Schema
 {
-    class Program
+    internal class Program
     {
-        static async Task Main(string[] args)
+        private static async Task Main(string[] args)
         {   
             var upOption = new Option("--up", "Migrate Up");
             upOption.Arity = ArgumentArity.ZeroOrOne;

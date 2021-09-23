@@ -15,10 +15,10 @@ namespace PizzaClient.Razor.Pages
 {
     public class MenuModel : PageModel
     {
-        public IDictionary<string, double> Sizes { get; set; } = new Dictionary<string, double>();
-        public IDictionary<string, double> Dough { get; set; } = new Dictionary<string, double>();
-        public IDictionary<string, double> Toppings { get; set; } = new Dictionary<string, double>();
-        public IDictionary<string, double> Sauces { get; set; } = new Dictionary<string, double>();
+        public Dictionary<string, double> Sizes { get; set; } = new();
+        public Dictionary<string, double> Dough { get; set; } = new();
+        public Dictionary<string, double> Toppings { get; set; } = new();
+        public Dictionary<string, double> Sauces { get; set; } = new();
 
         [TempData]
         public bool isSubmitClicked { get; set; } = false;
@@ -72,7 +72,10 @@ namespace PizzaClient.Razor.Pages
             }
 
             var client = _clientFactory.CreateClient("localhost");
-            var jsonPizza = JsonSerializer.Serialize<Pizza>(Order.Pizza);
+            var jsonPizza = JsonSerializer.Serialize<Pizza>(Order.Pizza, new JsonSerializerOptions
+            {
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+            });
 
             var request = new HttpRequestMessage
             {
