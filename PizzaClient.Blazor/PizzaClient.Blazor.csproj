@@ -7,8 +7,16 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Blazorise.Bootstrap" Version="0.9.4.4" />
-    <PackageReference Include="Blazorise.Icons.FontAwesome" Version="0.9.4.4" />
+    <PackageReference Include="Blazorise.Bootstrap">
+      <Version>0.9.4.4</Version>
+    </PackageReference>
+    <PackageReference Include="Blazorise.Icons.FontAwesome">
+      <Version>0.9.4.4</Version>
+    </PackageReference>
+    
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.0-rc.1.21451.13" />
+    <PackageReference Include="Microsoft.AspNetCore.Components" Version="6.0.0-rc.1.21452.15" />
+    <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="6.0.0-rc.1.21452.15" />
     
   </ItemGroup>
 

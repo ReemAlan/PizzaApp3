@@ -78,10 +78,10 @@
 </div>
 
 @*Order Form *@
-@* <div>
+<div>
     <EditForm Model="@order" OnValidSubmit="@HandleSubmit">
         <DataAnnotationsValidator />
-        <ValidationSummary />
+        @* <ValidationSummary /> *@
 
         <Field>
             <FieldLabel>Name</FieldLabel>
@@ -93,20 +93,17 @@
             <Column ColumnSize="ColumnSize.Is3.WithOffset">
                 <Field>
                     <FieldLabel>Size</FieldLabel>
-                    <SelectList
-                    TItem="Dictionary"
-                    TValue="string"
-                    Data="@Sizes"
-                    TextField="@((item)=>item.MyTextField)"
-                    ValueField="@((item)=>item.MyValueField)"
-                    SelectedValue="@selectedListValue"
-                    SelectedValueChanged="@MyListValueChangedHandler"
-                    DefaultItemText="Choose your country" />
+                    <Select TValue="int">
+                        <SelectItem Value="1">1</SelectItem>
+                        <SelectItem Value="2">2</SelectItem>
+                        <SelectItem Value="3">3</SelectItem>
+                        <SelectItem Value="4">4</SelectItem>
+                    </Select>
                 </Field>
             </Column>
         </Row>
     </EditForm>
-</div> *@
+</div>
 
 @code {
 
@@ -150,4 +147,5 @@
             StateHasChanged();
         }
     }  
+    public void HandleSubmit() {}
 }

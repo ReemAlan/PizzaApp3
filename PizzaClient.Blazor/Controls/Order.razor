@@ -1,15 +1,13 @@
 @page "/select"
 
 <h1>Order Now</h1>
-<SelectList
-    TItem="MySelectModel"
-    TValue="int"
-    Data="@myDdlData"
-    TextField="@((item)=>item.MyTextField)"
-    ValueField="@((item)=>item.MyValueField)"
-    SelectedValue="@selectedListValue"
-    SelectedValueChanged="@MyListValueChangedHandler"
-    DefaultItemText="Choose your country" />
+<Select TValue="int">
+    <SelectItem Value="1">1</SelectItem>
+    <SelectItem Value="2">2</SelectItem>
+    <SelectItem Value="3">3</SelectItem>
+    <SelectItem Value="4">4</SelectItem>
+</Select>
+
 
 
 @code{
