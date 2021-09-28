@@ -30,7 +30,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var pair in Dough)
+            @foreach (var pair in Doughs)
             {
                 <tr>
                     <td>@pair.Key</td>
@@ -79,80 +79,132 @@
 
 @*Order Form *@
 <div>
-    <EditForm Model="@order" OnValidSubmit="@HandleSubmit">
-        <DataAnnotationsValidator />
-        @* <ValidationSummary /> *@
+    <EditForm Model="@Order" OnValidSubmit="@HandleSubmit">
+        <Validations @ref="Validations" Mode="ValidationMode.Auto" Model="@Order" ValidateOnLoad="false">
+            <Field>
+                <FieldLabel>Name</FieldLabel>
+                <Validation>
+                    <TextEdit Placeholder="Enter name" @bind-Text="@Order.CustomerName">
+                        <Feedback>
+                            <ValidationError />
+                        </Feedback>
+                    </TextEdit>
+                </Validation>
+            </Field>
 
-        <Field>
-            <FieldLabel>Name</FieldLabel>
-            <TextEdit Placeholder="Enter name" />
-        </Field>
-
-        <Row>
-            <h5>Pizza</h5>
-            <Column ColumnSize="ColumnSize.Is3">
-                <Field>
-                    <FieldLabel>Size</FieldLabel>
-                    <Select TValue="string">
-                        @foreach (var pair in Sizes) 
-                        {
-                            <SelectItem Value="@pair.Key">@pair.Key</SelectItem>
-                        }
-                    </Select>
-                </Field>
-            </Column>
-            <Column ColumnSize="ColumnSize.Is3">
-                <Field>
-                    <FieldLabel>Dough</FieldLabel>
-                    <Select TValue="string">
-                        @foreach (var pair in Dough) 
-                        {
-                            <SelectItem Value="@pair.Key">@pair.Key</SelectItem>
-                        }
-                    </Select>
-                </Field>
-            </Column>
-            <Column ColumnSize="ColumnSize.Is3">
-                <Field>
-                    <FieldLabel>Sauce</FieldLabel>
-                    <Select TValue="string">
-                        @foreach (var pair in Sauces) 
-                        {
-                            <SelectItem Value="@pair.Key">@pair.Key</SelectItem>
-                        }
-                    </Select>
-                </Field>
-            </Column>
-            <Column ColumnSize="ColumnSize.Is3">
-                <Field>
-                    <FieldLabel>Toppings</FieldLabel>
-                    <Select Multiple TValue="string">
-                        @foreach (var pair in Toppings) 
-                        {
-                            <SelectItem Value="@pair.Key">@pair.Key</SelectItem>
-                        }
-                    </Select>
-                </Field>
-            </Column>
-        </Row>
-        <Row>
-            <Column ColumnSize="ColumnSize.Is1.Is11.WithOffset">
-                 <Button Type="ButtonType.Submit" PreventDefaultOnSubmit="true" Color="Color.Warning">Submit</Button>
-            </Column>
-        </Row>
+            <Row>
+                <h5>Pizza</h5>
+                <Column ColumnSize="ColumnSize.Is3">
+                    <Field>
+                        <FieldLabel>Size</FieldLabel>
+                        <Validation>
+                            <Select TValue="string" @bind-SelectedValue="@Order.Pizza.Size" >
+                                <SelectItem Value="@Dummy">Choose size</SelectItem>
+                                @foreach (var pair in Sizes) 
+                                {
+                                    <SelectItem Value="@pair.Key">@pair.Key</SelectItem>
+                                }
+                            </Select>
+                            <Feedback>
+                                <ValidationError />
+                            </Feedback>
+                        </Validation>
+                    </Field>
+                </Column>
+                <Column ColumnSize="ColumnSize.Is3">
+                    <Field>
+                        <FieldLabel>Dough</FieldLabel>
+                        <Validation>
+                            <Select TValue="string" @bind-SelectedValue="@Order.Pizza.Dough" > 
+                                <SelectItem Value="@Dummy">Choose dough type</SelectItem>
+                                @foreach (var pair in Doughs) 
+                                {
+                                    <SelectItem Value="@pair.Key">@pair.Key</SelectItem>
+                                }
+                            </Select>
+                            <Feedback>
+                                <ValidationError />
+                            </Feedback>
+                        </Validation>
+                    </Field>
+                </Column>
+                <Column ColumnSize="ColumnSize.Is3">
+                    <Field>
+                        <FieldLabel>Sauce</FieldLabel>
+                        <Validation>
+                            <Select TValue="string" @bind-SelectedValue="@Order.Pizza.BaseSauce" >
+                                <SelectItem Value="@Dummy">Choose sauce</SelectItem>
+                                @foreach (var pair in Sauces) 
+                                {
+                                    <SelectItem Value="@pair.Key">@pair.Key</SelectItem>
+                                }
+                            </Select>
+                            <Feedback>
+                                <ValidationError />
+                            </Feedback>
+                        </Validation>
+                    </Field>
+                </Column>
+                <Column ColumnSize="ColumnSize.Is3">
+                    <Field>
+                        <FieldLabel>Toppings</FieldLabel>
+                        <Validation Validator="@ValidateToppings">
+                            <Select TValue="string" Multiple SelectedValuesChanged="@(topps => Order.Pizza.Toppings = topps.ToList<string>())">
+                                @foreach (var pair in Toppings) 
+                                {
+                                    <SelectItem Value="@pair.Key">@pair.Key</SelectItem>
+                                }
+                            </Select>
+                            <Feedback>
+                                <ValidationError />
+                            </Feedback>
+                        </Validation>
+                    </Field>
+                </Column>
+            </Row>
+            <Row>
+                <Column ColumnSize="ColumnSize.Is1.Is11.WithOffset">
+                    <Button Type="ButtonType.Submit" PreventDefaultOnSubmit="true" Color="Color.Warning" Clicked="@HandleSubmit">Submit</Button>
+                </Column>
+            </Row>
+        </Validations>
     </EditForm>
     <br />
     <br />
 </div>
 
+<div>
+    <p>@Message</p>
+</div>
+
+
 @code {
 
     public Dictionary<string, double> Sizes { get; set; } = new();
-    public Dictionary<string, double> Dough { get; set; } = new();
+    public Dictionary<string, double> Doughs { get; set; } = new();
     public Dictionary<string, double> Sauces { get; set; } = new();
     public Dictionary<string, double> Toppings { get; set; } = new();
         
-    public Order order { get; set; } = new();
+    public OrderWeb Order { get; set; } = new();
+
+    string Dummy = ""; 
+    Validations Validations;
+
+    public string Message { get; set; }
+
+    void ValidateToppings(ValidatorEventArgs e)
+    {
+        string[] chosen = e.Value as string[];
+
+        if (chosen is not null) 
+        {
+            e.Status = chosen.Length > 0 ? ValidationStatus.Success: ValidationStatus.Error;
+        }
+        else
+        {
+            e.Status = ValidationStatus.Error;
+        }
+    }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -176,7 +228,7 @@
             var dough = menu["doughTable"].AsArray();
             foreach (var obj in dough)
             {
-                Dough.Add((string)obj["option"], (double)obj["price"]);
+                Doughs.Add((string)obj["option"], (double)obj["price"]);
             }
 
             var toppings = menu["toppingTable"].AsArray();
@@ -187,6 +239,46 @@
 
             StateHasChanged();
         }
-    }  
-    public void HandleSubmit() {}
+    } 
+
+    public async Task HandleSubmit() 
+    {
+        if (!Validations.ValidateAll())
+        {
+            return;
+        }
+
+        var client = _clientFactory.CreateClient("localhost");
+        var jsonPizza = JsonSerializer.Serialize<Pizza>(Order.Pizza, new JsonSerializerOptions
+        {
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+        });
+
+        var request = new HttpRequestMessage
+        {
+            Method = HttpMethod.Get,
+            RequestUri = new Uri(client.BaseAddress.ToString() + "price"),
+            Content = new StringContent(jsonPizza, Encoding.UTF8, "application/json"),
+        };
+        var price = await client.SendAsync(request);
+        Order.Pizza.Price = Double.Parse(await price.Content.ReadAsStringAsync());
+        
+        var jsonOrder = JsonSerializer.Serialize<OrderWeb>(Order);
+
+        StringContent newOrder = new StringContent(jsonOrder, Encoding.UTF8, "application/json");
+        var response = await client.PostAsync("web-order", newOrder);
+
+        if (response.IsSuccessStatusCode)
+        {
+            @* TempData["message"] = $"Thank you for visiting our restaurant!\nThe total price is {Order.Pizza.Price}"; *@
+            Message = $"Thank you for visiting our restaurant!\nThe total price is {Order.Pizza.Price}";
+        }
+        else
+        {
+            @* TempData["message"] = "We could not place your order :("; *@
+            Message = "We could not place your order :(";
+        }
+        
+        @* isSubmitClicked = true; *@
+    }
 }

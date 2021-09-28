@@ -24,7 +24,7 @@ namespace PizzaClient.Razor.Pages
         public bool isSubmitClicked { get; set; } = false;
         
         [BindProperty]
-        public Order Order { get; set; }
+        public OrderWeb Order { get; set; }
 
         private readonly IHttpClientFactory _clientFactory;
 
@@ -86,10 +86,10 @@ namespace PizzaClient.Razor.Pages
             var price = await client.SendAsync(request);
             Order.Pizza.Price = Double.Parse(await price.Content.ReadAsStringAsync());
             
-            var jsonOrder = JsonSerializer.Serialize<Order>(Order);
+            var jsonOrder = JsonSerializer.Serialize<OrderWeb>(Order);
 
             StringContent newOrder = new StringContent(jsonOrder, Encoding.UTF8, "application/json");
-            var response = await client.PostAsync("order", newOrder);
+            var response = await client.PostAsync("web-order", newOrder);
 
             if (response.IsSuccessStatusCode)
             {

@@ -138,6 +138,43 @@ app.MapPost("api/order", async ([FromBody]Order order) =>
         adapter.Rollback();
     }
 });
+
+app.MapPost("api/web-order", async ([FromBody]OrderWeb order) =>
+{
+    using var adapter = new DataAccessAdapter();
+    adapter.StartTransaction(IsolationLevel.ReadCommitted, "MultiEntityInsertion");
+    try
+    {
+        OrderEntity orderRow = new OrderEntity();
+        orderRow.CustomerName = order.CustomerName;
+        await adapter.SaveEntityAsync(orderRow, true);
+        int orderId = orderRow.Id;
+
+        PizzaEntity pizzaRow = new PizzaEntity();
+        pizzaRow.Base = order.Pizza.BaseSauce;
+        pizzaRow.Dough = order.Pizza.Dough;
+        pizzaRow.OrderId = orderId;
+        pizzaRow.Size = order.Pizza.Size;
+        pizzaRow.Price = (decimal)order.Pizza.Price;
+        await adapter.SaveEntityAsync(pizzaRow, true);
+
+        int pizzaId = pizzaRow.Id;
+        foreach (var topping in order.Pizza.Toppings)
+        {
+            PizzaToppingEntity toppingRow = new PizzaToppingEntity();
+            toppingRow.PizzaId = pizzaId;
+            toppingRow.Topping = topping;
+            await adapter.SaveEntityAsync(toppingRow, true);
+        }
+    
+        await adapter.CommitAsync(CancellationToken.None);
+    }
+    catch (Exception e)
+    {
+        Console.WriteLine(e.Message);
+        adapter.Rollback();
+    }
+});
  
 app.Run();
 
@@ -154,10 +191,21 @@ static void LlblGen(string connString)
 
 public class Order 
 {
-    public List<Pizza> Pizzas { get; set; } = new List<Pizza>();
+    public List<Pizza> Pizzas { get; set; } = new();
     public string CustomerName { get; set; }
     
     public Order(string customerName)
+    {
+        CustomerName = customerName;
+    }
+}
+
+public class OrderWeb
+{
+    public Pizza Pizza { get; set; }
+    public string CustomerName { get; set; }
+    
+    public OrderWeb(string customerName)
     {
         CustomerName = customerName;
     }

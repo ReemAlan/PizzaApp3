@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace PizzaClient.Razor.DTOs
 {
-    public class Order 
+    public class OrderWeb 
     {
         [Required(ErrorMessage = "You have not chosen any pizza!")]
         public Pizza Pizza { get; set; }
