@@ -1,0 +1,96 @@
+@page "/menu"
+@inject Menu.MenuClient MenuClient
+
+<PageTitle>Menu</PageTitle>
+
+<h1>Menu</h1>
+
+@if (PizzaMenu != null) 
+{
+    <div>
+        <table class="table table-light table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">Size</th>
+                    <th scope="col">Dough Multiplier</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var pair in PizzaMenu.Sizes)
+                {
+                    <tr>
+                        <td>@pair.Name</td>
+                        <td>@pair.Multiplier</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <table class="table table-light table-hover">
+            <thead>
+                <tr>
+                    <th scope="col w-50">Dough</th>
+                    <th scope="col">Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var pair in PizzaMenu.Doughs)
+                {
+                    <tr>
+                        <td>@pair.Name</td>
+                        <td>@pair.Price</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <table class="table table-light table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">Sauce</th>
+                    <th scope="col">Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var pair in PizzaMenu.Sauces)
+                {
+                    <tr>
+                        <td>@pair.Name</td>
+                        <td>@pair.Price</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <table class="table table-light table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">Topping</th>
+                    <th scope="col">Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var pair in PizzaMenu.Toppings)
+                {
+                    <tr>
+                        <td>@pair.Name</td>
+                        <td>@pair.Price</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+else {
+    <h3>Please wait...</h3>
+}
+
+
+@code {
+    public MenuReply? PizzaMenu { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        PizzaMenu = await MenuClient.GetMenuAsync(new Empty());
+    }
+}
