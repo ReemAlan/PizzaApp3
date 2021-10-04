@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+option csharp_namespace = "Pizza.WASM.gRPC";
+
+package pizza_order;
+
+service PizzaOrder {
+  // Send order
+  rpc MakeOrder (Order) returns (Confirmation);
+}
+
+message Order {
+    string customer_name = 1;
+    Pizza pizza = 2;
+}
+
+message Pizza {
+    string size = 1;
+    string dough = 2;
+    string sauce = 3;
+    repeated string toppings = 4;
+    double price = 5;
+}
+
+message Confirmation {
+    string message = 1;
+}

@@ -1,0 +1,34 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Protobuf Include="Protos\greet.proto" GrpcServices="Server" />
+    <Protobuf Include="Protos\menu.proto" GrpcServices="Server" />
+    <Protobuf Include="Protos\order.proto" GrpcServices="Server" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Grpc.AspNetCore" Version="2.32.0" />
+    <PackageReference Include="Grpc.AspNetCore.Web" Version="2.39.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Npgsql.NetTopologySuite" Version="5.0.7" />
+    <PackageReference Include="SD.LLBLGen.Pro.DQE.PostgreSql" Version="5.8.2" />
+    <PackageReference Include="Npgsql" Version="5.0.7" />
+    <PackageReference Include="SD.LLBLGen.Pro.ORMSupportClasses" Version="5.8.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ObjectModel\DatabaseGeneric\Restaurant.csproj" />
+    <ProjectReference Include="..\ObjectModel\DatabaseSpecific\RestaurantDBSpecific.csproj" />
+    <ProjectReference Include="..\ObjectModel\View.Persistence\View.Persistence.csproj" />
+    <ProjectReference Include="..\ObjectModel\View\View.csproj" />
+  </ItemGroup>
+
+</Project>

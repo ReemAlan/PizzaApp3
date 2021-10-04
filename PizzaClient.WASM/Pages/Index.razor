@@ -1,0 +1,17 @@
+﻿@page "/"
+@inject Greeter.GreeterClient GreeterClient
+
+<PageTitle>Index</PageTitle>
+
+<h1>Welcome to The Pizza Place	&#127829;</h1>
+
+<h2>@GrpcResponse</h2>
+
+@code {
+    public string? GrpcResponse { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        GrpcResponse = (await GreeterClient.SayHelloAsync(new HelloRequest { Name = "Reem" })).Message;
+    }
+}

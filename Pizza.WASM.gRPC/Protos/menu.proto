@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+option csharp_namespace = "Pizza.WASM.gRPC";
+
+package menu;
+
+import "google/protobuf/empty.proto";
+
+service Menu {
+  // Retrieves menu
+  rpc GetMenu (google.protobuf.Empty) returns (MenuReply);
+}
+
+message MenuReply {
+  repeated ItemMultiplier sizes = 1;
+  repeated Item doughs = 2;
+  repeated Item sauces = 3;
+  repeated Item toppings = 4;
+}
+
+message Item {
+  string name = 1;
+  double price = 2;
+}
+
+message ItemMultiplier {
+  string name = 1;
+  double multiplier = 2;
+}
