@@ -78,7 +78,7 @@
 </div>
 
 @*Order Form *@
-<div>
+<div class="page-header bg-gradient-primary-to-secondary page-header-dark" cellpadding="0">
     <EditForm Model="@Order" OnValidSubmit="@HandleSubmit">
         <Validations @ref="Validations" Mode="ValidationMode.Auto" Model="@Order" ValidateOnLoad="false">
             <Field>
@@ -163,8 +163,8 @@
                 </Column>
             </Row>
             <Row>
-                <Column ColumnSize="ColumnSize.Is1.Is11.WithOffset">
-                    <Button Type="ButtonType.Submit" PreventDefaultOnSubmit="true" Color="Color.Warning" Clicked="@HandleSubmit">Submit</Button>
+                <Column ColumnSize="ColumnSize.Is3">
+                    <Button class="btn-primary" Type="ButtonType.Submit" PreventDefaultOnSubmit="true" Color="Color.Warning" Clicked="@HandleSubmit">Submit</Button>
                 </Column>
             </Row>
         </Validations>
@@ -173,10 +173,20 @@
     <br />
 </div>
 
-<div>
-    <p>@Message</p>
-</div>
-
+@*Modal*@
+<Modal @ref="modalRef">
+    <ModalContent Centered="true">
+        <ModalHeader>
+            <ModalTitle>Order Submitted &#x1F60a; </ModalTitle>
+            <CloseButton />
+        </ModalHeader>
+        <ModalBody>
+            <Field>
+                <FieldLabel>@Message LE &#128176;</FieldLabel>
+            </Field>
+        </ModalBody>
+    </ModalContent>
+</Modal>
 
 @code {
 
@@ -186,7 +196,7 @@
     public Dictionary<string, double> Toppings { get; set; } = new();
         
     public OrderWeb Order { get; set; } = new();
-
+    private Modal modalRef;
     string Dummy = ""; 
     Validations Validations;
 
@@ -270,15 +280,13 @@
 
         if (response.IsSuccessStatusCode)
         {
-            @* TempData["message"] = $"Thank you for visiting our restaurant!\nThe total price is {Order.Pizza.Price}"; *@
             Message = $"Thank you for visiting our restaurant!\nThe total price is {Order.Pizza.Price}";
         }
         else
         {
-            @* TempData["message"] = "We could not place your order :("; *@
             Message = "We could not place your order :(";
         }
-        
-        @* isSubmitClicked = true; *@
+
+        modalRef.Show();
     }
 }
