@@ -81,110 +81,109 @@
             </tbody>
         </table>
     </div>
+
+    @*Order Form *@
+    <div class="page-header bg-gradient-primary-to-secondary page-header-dark" cellpadding="0">
+        <EditForm Model="@Order" OnValidSubmit="@HandleSubmit">
+            <Validations @ref="Validations" Mode="ValidationMode.Auto" Model="@Order" ValidateOnLoad="false">
+                <Field>
+                    <FieldLabel>Name</FieldLabel>
+                    <Validation>
+                        <TextEdit Placeholder="Enter name" @bind-Text="@Order.CustomerName">
+                            <Feedback>
+                                <ValidationError />
+                            </Feedback>
+                        </TextEdit>
+                    </Validation>
+                </Field>
+
+                <Row>
+                    <h5>Pizza</h5>
+                    <Column ColumnSize="ColumnSize.Is3">
+                        <Field>
+                            <FieldLabel>Size</FieldLabel>
+                            <Validation>
+                                <Select TValue="string" @bind-SelectedValue="@Order.Pizza.Size">
+                                    <SelectItem Value="@Dummy">Choose size</SelectItem>
+                                    @foreach (var pair in PizzaMenu.Sizes)
+                                    {
+                                        <SelectItem Value="@pair.Name">@pair.Name</SelectItem>
+                                    }
+                                </Select>
+                                <Feedback>
+                                    <ValidationError />
+                                </Feedback>
+                            </Validation>
+                        </Field>
+                    </Column>
+                    <Column ColumnSize="ColumnSize.Is3">
+                        <Field>
+                            <FieldLabel>Dough</FieldLabel>
+                            <Validation>
+                                <Select TValue="string" @bind-SelectedValue="@Order.Pizza.Dough">
+                                    <SelectItem Value="@Dummy">Choose dough type</SelectItem>
+                                    @foreach (var pair in PizzaMenu.Doughs)
+                                    {
+                                        <SelectItem Value="@pair.Name">@pair.Name</SelectItem>
+                                    }
+                                </Select>
+                                <Feedback>
+                                    <ValidationError />
+                                </Feedback>
+                            </Validation>
+                        </Field>
+                    </Column>
+                    <Column ColumnSize="ColumnSize.Is3">
+                        <Field>
+                            <FieldLabel>Sauce</FieldLabel>
+                            <Validation>
+                                <Select TValue="string" @bind-SelectedValue="@Order.Pizza.Sauce">
+                                    <SelectItem Value="@Dummy">Choose sauce</SelectItem>
+                                    @foreach (var pair in PizzaMenu.Sauces)
+                                    {
+                                        <SelectItem Value="@pair.Name">@pair.Name</SelectItem>
+                                    }
+                                </Select>
+                                <Feedback>
+                                    <ValidationError />
+                                </Feedback>
+                            </Validation>
+                        </Field>
+                    </Column>
+                    <Column ColumnSize="ColumnSize.Is3">
+                        <Field>
+                            <FieldLabel>Toppings</FieldLabel>
+                            <Validation Validator="@ValidateToppings">
+                                <Select TValue="string" Multiple
+                                    SelectedValuesChanged="@(topps => TempToppings = topps.ToList<string>())">
+                                    @foreach (var pair in PizzaMenu.Toppings)
+                                    {
+                                        <SelectItem Value="@pair.Name">@pair.Name</SelectItem>
+                                    }
+                                </Select>
+                                <Feedback>
+                                    <ValidationError />
+                                </Feedback>
+                            </Validation>
+                        </Field>
+                    </Column>
+                </Row>
+                <Row>
+                    <Column ColumnSize="ColumnSize.Is3">
+                        <Button class="btn-primary" Type="ButtonType.Submit" PreventDefaultOnSubmit="true"
+                            Color="Color.Warning" Clicked="@HandleSubmit">Submit</Button>
+                    </Column>
+                </Row>
+            </Validations>
+        </EditForm>
+        <br />
+        <br />
+    </div>
 }
 else
 {
     <h3>Please wait...</h3>
 }
-
-
-@*Order Form *@
-<div class="page-header bg-gradient-primary-to-secondary page-header-dark" cellpadding="0">
-    <EditForm Model="@Order" OnValidSubmit="@HandleSubmit">
-        <Validations @ref="Validations" Mode="ValidationMode.Auto" Model="@Order" ValidateOnLoad="false">
-            <Field>
-                <FieldLabel>Name</FieldLabel>
-                <Validation>
-                    <TextEdit Placeholder="Enter name" @bind-Text="@Order.CustomerName">
-                        <Feedback>
-                            <ValidationError />
-                        </Feedback>
-                    </TextEdit>
-                </Validation>
-            </Field>
-
-            <Row>
-                <h5>Pizza</h5>
-                <Column ColumnSize="ColumnSize.Is3">
-                    <Field>
-                        <FieldLabel>Size</FieldLabel>
-                        <Validation>
-                            <Select TValue="string" @bind-SelectedValue="@Order.Pizza.Size">
-                                <SelectItem Value="@Dummy">Choose size</SelectItem>
-                                @foreach (var pair in PizzaMenu.Sizes)
-                                {
-                                    <SelectItem Value="@pair.Name">@pair.Name</SelectItem>
-                                }
-                            </Select>
-                            <Feedback>
-                                <ValidationError />
-                            </Feedback>
-                        </Validation>
-                    </Field>
-                </Column>
-                <Column ColumnSize="ColumnSize.Is3">
-                    <Field>
-                        <FieldLabel>Dough</FieldLabel>
-                        <Validation>
-                            <Select TValue="string" @bind-SelectedValue="@Order.Pizza.Dough">
-                                <SelectItem Value="@Dummy">Choose dough type</SelectItem>
-                                @foreach (var pair in PizzaMenu.Doughs)
-                                {
-                                    <SelectItem Value="@pair.Name">@pair.Name</SelectItem>
-                                }
-                            </Select>
-                            <Feedback>
-                                <ValidationError />
-                            </Feedback>
-                        </Validation>
-                    </Field>
-                </Column>
-                <Column ColumnSize="ColumnSize.Is3">
-                    <Field>
-                        <FieldLabel>Sauce</FieldLabel>
-                        <Validation>
-                            <Select TValue="string" @bind-SelectedValue="@Order.Pizza.Sauce">
-                                <SelectItem Value="@Dummy">Choose sauce</SelectItem>
-                                @foreach (var pair in PizzaMenu.Sauces)
-                                {
-                                    <SelectItem Value="@pair.Name">@pair.Name</SelectItem>
-                                }
-                            </Select>
-                            <Feedback>
-                                <ValidationError />
-                            </Feedback>
-                        </Validation>
-                    </Field>
-                </Column>
-                <Column ColumnSize="ColumnSize.Is3">
-                    <Field>
-                        <FieldLabel>Toppings</FieldLabel>
-                        <Validation Validator="@ValidateToppings">
-                            <Select TValue="string" Multiple
-                                SelectedValuesChanged="@(topps => TempToppings = topps.ToList<string>())">
-                                @foreach (var pair in PizzaMenu.Toppings)
-                                {
-                                    <SelectItem Value="@pair.Name">@pair.Name</SelectItem>
-                                }
-                            </Select>
-                            <Feedback>
-                                <ValidationError />
-                            </Feedback>
-                        </Validation>
-                    </Field>
-                </Column>
-            </Row>
-            <Row>
-                <Column ColumnSize="ColumnSize.Is3">
-                    <Button class="btn-primary" Type="ButtonType.Submit" PreventDefaultOnSubmit="true"
-                        Color="Color.Warning" Clicked="@HandleSubmit">Submit</Button>
-                </Column>
-            </Row>
-        </Validations>
-    </EditForm>
-    <br />
-    <br />
-</div>
 
 @*Modal*@
 <Modal @ref="modalRef">
@@ -204,11 +203,12 @@ else
 @code {
     public MenuReply? PizzaMenu { get; set; }
     public string? Message { get; set; }
-    public Order Order { get; set; } = new();
+    public OrderDTO Order { get; set; } = new();
+    public List<string>? TempToppings { get; set; }
+
     private Modal modalRef;
     string Dummy = "";
     Validations Validations;
-    public List<string> TempToppings { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -238,11 +238,25 @@ else
 
         Order.Pizza.Toppings.Add(TempToppings);
         CalculatePrice(Order);
-        Message = (await OrderClient.MakeOrderAsync(Order)).Message;
+        Message = (await OrderClient.MakeOrderAsync(MapOrder(Order))).Message;
         modalRef.Show();
     }
 
-    public void CalculatePrice(Order order)
+    public Order MapOrder(OrderDTO orderDto)
+    {
+        Order order = new();
+        order.CustomerName = orderDto.CustomerName;
+        Pizza pizza = new();
+        pizza.Size = orderDto.Pizza.Size;
+        pizza.Dough = orderDto.Pizza.Dough;
+        pizza.Sauce = orderDto.Pizza.Sauce;
+        pizza.Toppings.Add(orderDto.Pizza.Toppings);
+        order.Pizza = pizza;
+
+        return order;
+    }
+
+    public void CalculatePrice(OrderDTO order)
     {
         double price = 0;
         foreach (var size in PizzaMenu.Sizes)
