@@ -155,7 +155,7 @@
                             <FieldLabel>Toppings</FieldLabel>
                             <Validation Validator="@ValidateToppings">
                                 <Select TValue="string" Multiple
-                                    SelectedValuesChanged="@(topps => TempToppings = topps.ToList<string>())">
+                                SelectedValuesChanged="@(topps => TempToppings = topps.ToList<string>())">
                                     @foreach (var pair in PizzaMenu.Toppings)
                                     {
                                         <SelectItem Value="@pair.Name">@pair.Name</SelectItem>
@@ -171,7 +171,7 @@
                 <Row>
                     <Column ColumnSize="ColumnSize.Is3">
                         <Button class="btn-primary" Type="ButtonType.Submit" PreventDefaultOnSubmit="true"
-                            Color="Color.Warning" Clicked="@HandleSubmit">Submit</Button>
+                        Color="Color.Warning" Clicked="@HandleSubmit">Submit</Button>
                     </Column>
                 </Row>
             </Validations>
@@ -239,6 +239,7 @@ else
         Order.Pizza.Toppings.Add(TempToppings);
         CalculatePrice(Order);
         Message = (await OrderClient.MakeOrderAsync(MapOrder(Order))).Message;
+        Message = Message + " " + Order.Pizza.Price;
         modalRef.Show();
     }
 
@@ -251,6 +252,7 @@ else
         pizza.Dough = orderDto.Pizza.Dough;
         pizza.Sauce = orderDto.Pizza.Sauce;
         pizza.Toppings.Add(orderDto.Pizza.Toppings);
+        pizza.Price = orderDto.Pizza.Price;
         order.Pizza = pizza;
 
         return order;
