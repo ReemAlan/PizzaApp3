@@ -1,4 +1,4 @@
-_This repository contains 4 exercises part of the summer internship (2021) at SilverKey Technologies_
+__This repository contains 4 exercises part of the summer internship (2021) at SilverKey Technologies__
 
 - Exercise 3: LLBLGen ORM + REST API with PostgreSQL connection + Console client
 - Exercise 4: LLBLGen ORM + REST API with PostgreSQL connection + Razor Pages client
